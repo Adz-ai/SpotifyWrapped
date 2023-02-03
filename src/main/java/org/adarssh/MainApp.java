@@ -10,6 +10,8 @@ public class MainApp {
 
     private static final TopSpotifyAlbums topSpotifyAlbums = new TopSpotifyAlbums();
 
+    private static final TopSpotifyGenres topSpotifyGenres = new TopSpotifyGenres();
+
     private static String accessToken;
     public static void main(String[] args) {
         getUserAccessToken();
@@ -19,6 +21,8 @@ public class MainApp {
         topSpotifyArtists.outputTopSpotifyArtists(accessToken);
         System.out.println();
         topSpotifyAlbums.outputTopSpotifyAlbums(accessToken);
+        System.out.println();
+        topSpotifyGenres.outputTopSpotifyGenres(accessToken);
 
     }
 

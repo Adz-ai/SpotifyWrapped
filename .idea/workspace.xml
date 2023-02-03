@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="edited build.gradle.kts">
+    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="Extracting Duplicated Code into another Class">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/TopSpotifyGenres.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +80,13 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -99,6 +108,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "extract.method.default.visibility": "public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -107,6 +117,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.adarssh" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="MainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.adarssh.MainApp" />
@@ -191,9 +206,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675442716606</updated>
-      <workItem from="1675442718870" duration="74000" />
+      <workItem from="1675442718870" duration="2794000" />
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="TopSpotifyAlbums">
+      <created>1675443087312</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1675443087312</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Extracting Duplicated Code into another Class">
+      <created>1675444009246</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1675444009246</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +248,8 @@
     <MESSAGE value="Removed Lombok" />
     <MESSAGE value="idea" />
     <MESSAGE value="edited build.gradle.kts" />
-    <option name="LAST_COMMIT_MESSAGE" value="edited build.gradle.kts" />
+    <MESSAGE value="TopSpotifyAlbums" />
+    <MESSAGE value="Extracting Duplicated Code into another Class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Extracting Duplicated Code into another Class" />
   </component>
 </project>
