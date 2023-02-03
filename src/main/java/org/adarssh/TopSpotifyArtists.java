@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
-public class TopSpotifyArtists extends SpotifyCrdentialHandling {
+public class TopSpotifyArtists extends SpotifyCredentialHandling {
 
     private static final String API_URL = "https://api.spotify.com/v1/me/top/artists?limit=5";
 
