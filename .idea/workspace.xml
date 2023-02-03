@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="Extracting Duplicated Code into another Class">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/TopSpotifyGenres.java" afterDir="false" />
+    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="Implemented Method to obtain Token">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adarssh/SpotifyCredentialHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/SpotifyCredentialHandling.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +206,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675442716606</updated>
-      <workItem from="1675442718870" duration="2794000" />
+      <workItem from="1675442718870" duration="4466000" />
     </task>
     <task id="LOCAL-00009" summary="TopSpotifyAlbums">
       <created>1675443087312</created>
@@ -222,7 +222,21 @@
       <option name="project" value="LOCAL" />
       <updated>1675444009246</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="TopSpotifyGenres">
+      <created>1675446216299</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1675446216299</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Refactored Name">
+      <created>1675446320240</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1675446320240</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,6 +264,9 @@
     <MESSAGE value="edited build.gradle.kts" />
     <MESSAGE value="TopSpotifyAlbums" />
     <MESSAGE value="Extracting Duplicated Code into another Class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Extracting Duplicated Code into another Class" />
+    <MESSAGE value="TopSpotifyGenres" />
+    <MESSAGE value="Refactored Name" />
+    <MESSAGE value="Implemented Method to obtain Token" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented Method to obtain Token" />
   </component>
 </project>

@@ -2,6 +2,8 @@ package org.adarssh;
 
 import java.util.Scanner;
 
+import static org.adarssh.SpotifyCredentialHandling.obtainToken;
+
 public class MainApp {
 
     private static final TopSpotifySongs topSpotifySongs = new TopSpotifySongs();
@@ -14,7 +16,8 @@ public class MainApp {
 
     private static String accessToken;
     public static void main(String[] args) {
-        getUserAccessToken();
+//        getUserAccessToken();
+        accessToken = obtainToken();
         System.out.println();
         topSpotifySongs.outputTopSpotifySongs(accessToken);
         System.out.println();
