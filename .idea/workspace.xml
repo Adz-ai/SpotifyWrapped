@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="Get Rid of build folder">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adarssh/MainApp.java" afterDir="false" />
-    </list>
+    <list default="true" id="4f4bbb0e-9ec3-43ca-ba7c-a4b32efb4b91" name="Changes" comment="Removed Lombok" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675426092960</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Removed Lombok">
+      <created>1675426349280</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1675426349280</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -129,6 +134,7 @@
     <MESSAGE value="gitignore" />
     <MESSAGE value="Lombok and Adding ability for User to provide Token" />
     <MESSAGE value="Get Rid of build folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Get Rid of build folder" />
+    <MESSAGE value="Removed Lombok" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed Lombok" />
   </component>
 </project>
