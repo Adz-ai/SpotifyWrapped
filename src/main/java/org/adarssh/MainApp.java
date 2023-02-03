@@ -8,6 +8,8 @@ public class MainApp {
 
     private static final TopSpotifyArtists topSpotifyArtists = new TopSpotifyArtists();
 
+    private static final TopSpotifyAlbums topSpotifyAlbums = new TopSpotifyAlbums();
+
     private static String accessToken;
     public static void main(String[] args) {
         getUserAccessToken();
@@ -15,6 +17,8 @@ public class MainApp {
         topSpotifySongs.outputTopSpotifySongs(accessToken);
         System.out.println();
         topSpotifyArtists.outputTopSpotifyArtists(accessToken);
+        System.out.println();
+        topSpotifyAlbums.outputTopSpotifyAlbums(accessToken);
 
     }
 

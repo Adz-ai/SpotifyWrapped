@@ -1,20 +1,18 @@
 package org.adarssh;
 
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class TopSpotifyArtists {
+public class TopSpotifyAlbums {
 
-    private static final String API_URL = "https://api.spotify.com/v1/me/top/artists?limit=5";
+    private static final String API_URL = "https://api.spotify.com/v1/me/top/albums?limit=5";
 
-    public void outputTopSpotifyArtists(String ACCESS_TOKEN) {
+    public void outputTopSpotifyAlbums(String ACCESS_TOKEN) {
         try {
             URL url = new URL(API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -35,14 +33,15 @@ public class TopSpotifyArtists {
                 reader.close();
                 JSONObject response = new JSONObject(builder.toString());
                 JSONArray items = response.getJSONArray("items");
-                System.out.println("My top Spotify artists of the month are:");
+                System.out.println("My top Spotify albums of the month are:");
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    String name = item.getString("name");
+                    JSONObject album = item.getJSONObject("album");
+                    String name = album.getString("name");
                     System.out.println(name);
                 }
             } else {
-                System.out.println("Failed to retrieve top Spotify artists: " + connection.getResponseMessage());
+                System.out.println("Failed to retrieve top Spotify albums: " + connection.getResponseMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
