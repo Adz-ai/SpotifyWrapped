@@ -43,3 +43,7 @@ bin/
 
 .*
 !/.gitignore
+/build/
+/out/
+/.gradle/
+
