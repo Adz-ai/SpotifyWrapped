@@ -3,6 +3,7 @@ package org.adarssh;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * Main Spring Boot application class for Spotify Wrapped API
@@ -22,9 +23,15 @@ import org.springframework.cache.annotation.EnableCaching;
  * - GET /api/spotify/wrapped - Get all top items at once
  * <p>
  * All endpoints accept an optional 'limit' query parameter (default: 5)
+ * <p>
+ * Configuration:
+ * - @EnableCaching: Enables response caching with Caffeine
+ * - @EnableAspectJAutoProxy(exposeProxy = true): Exposes AOP proxy for internal method calls
+ *   This is required for @Cacheable, @Retry, @CircuitBreaker to work on self-invocations
  */
 @SpringBootApplication
 @EnableCaching
+@EnableAspectJAutoProxy(exposeProxy = true)
 public class SpotifyWrappedApplication {
 
     public static void main(String[] args) {

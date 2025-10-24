@@ -11,6 +11,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
@@ -124,12 +125,18 @@ public class SpotifyService {
     }
 
     /**
-     * Get top albums from user's top tracks
+     * Get top albums from user's top tracks.
+     * Uses AOP proxy to ensure caching works on internal call to getTopTracks().
+     *
+     * @param limit the maximum number of albums to return
+     * @return the user's top albums derived from top tracks
      */
     public UserTopItemsResponse<AlbumDto> getTopAlbums(Integer limit) {
         log.debug("Fetching top albums from top tracks");
         Integer maxSize = limit != null ? limit : properties.defaultLimit();
-        var topTracks = getTopTracks(maxSize);
+        // Get the Spring AOP proxy to ensure @Cacheable, @Retry, @CircuitBreaker work
+        SpotifyService proxy = (SpotifyService) AopContext.currentProxy();
+        var topTracks = proxy.getTopTracks(maxSize);
 
         var albums = topTracks.items().stream()
                 .map(TrackDto::album)
@@ -141,17 +148,23 @@ public class SpotifyService {
     }
 
     /**
-     * Get top genres from user's top artists
+     * Get top genres from user's top artists.
+     * Uses AOP proxy to ensure caching works on internal call to getTopArtists().
+     *
+     * @param limit the maximum number of genres to return
+     * @return the user's top genres derived from top artists
      */
     public UserTopItemsResponse<String> getTopGenres(Integer limit) {
         log.debug("Fetching top genres from top artists");
-        Integer limit1 = limit != null ? limit : properties.defaultLimit();
-        var topArtists = getTopArtists(limit1);
+        Integer maxSize = limit != null ? limit : properties.defaultLimit();
+        // Get the Spring AOP proxy to ensure @Cacheable, @Retry, @CircuitBreaker work
+        SpotifyService proxy = (SpotifyService) AopContext.currentProxy();
+        var topArtists = proxy.getTopArtists(maxSize);
 
         var genres = topArtists.items().stream()
                 .flatMap(artist -> artist.genres().stream())
                 .distinct()
-                .limit(limit1)
+                .limit(maxSize)
                 .collect(Collectors.toList());
 
         return new UserTopItemsResponse<>("genres", genres.size(), genres);

@@ -21,4 +21,15 @@
         <Package name="org.adarssh.service"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
+
+    <!-- Spring controllers use dependency injection with immutable beans.
+         The EI_EXPOSE_REP2 warnings are false positives since:
+         1. Service beans are managed by Spring container
+         2. Constructor injection is the recommended Spring pattern
+         3. These beans are effectively immutable after injection
+    -->
+    <Match>
+        <Package name="org.adarssh.controller"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>
