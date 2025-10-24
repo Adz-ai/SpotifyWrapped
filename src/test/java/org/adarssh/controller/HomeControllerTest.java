@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
 ))
 @Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
+@org.springframework.test.context.ActiveProfiles("test")
 class HomeControllerTest {
 
     @Autowired
@@ -96,11 +97,12 @@ class HomeControllerTest {
     void homeWhenAuthenticatedWithNullDisplayNameReturnsNullUser() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", "test-user-id");
         attributes.put("display_name", null);
         OAuth2User oauth2User = new DefaultOAuth2User(
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes,
-                "display_name"
+                "id"  // Use "id" as nameAttributeKey since display_name is null
         );
 
         // when/then
@@ -108,7 +110,7 @@ class HomeControllerTest {
                         .with(oauth2Login().oauth2User(oauth2User)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(true))
-                .andExpect(jsonPath("$.user").value(null));
+                .andExpect(jsonPath("$.user").doesNotExist());
     }
 
     @Test
@@ -127,7 +129,7 @@ class HomeControllerTest {
                         .with(oauth2Login().oauth2User(oauth2User)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(true))
-                .andExpect(jsonPath("$.user").value(null));
+                .andExpect(jsonPath("$.user").doesNotExist());
     }
 
     @Test

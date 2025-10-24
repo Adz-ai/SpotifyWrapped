@@ -73,7 +73,8 @@ public class HomeController {
 
         if (principal != null) {
             response.put("authenticated", true);
-            response.put("user", principal.getAttribute("display_name"));
+            Object displayName = principal.getAttribute("display_name");
+            response.put("user", displayName);
             response.put("message", "You are logged in! Try: /api/spotify/wrapped");
             response.put("endpoints", Map.of(
                 "wrapped", "/api/spotify/wrapped",

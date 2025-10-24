@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
 ))
 @Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
+@org.springframework.test.context.ActiveProfiles("test")
 class SpotifyControllerTest {
 
     @Autowired

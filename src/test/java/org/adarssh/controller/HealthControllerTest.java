@@ -17,11 +17,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(value = HealthController.class, excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
-))
+@WebMvcTest(
+        value = HealthController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
+        )
+)
 @Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
+@org.springframework.test.context.ActiveProfiles("test")
 class HealthControllerTest {
 
     @Autowired
