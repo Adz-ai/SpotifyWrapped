@@ -47,3 +47,27 @@ bin/
 /out/
 /.gradle/
 
+### Application Specific ###
+old-code/
+.env
+*.log
+
+### Frontend (Node.js / React) ###
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Frontend coverage and test files
+frontend/coverage/
+frontend/.nyc_output/
+
