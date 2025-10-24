@@ -15,14 +15,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriBuilder;
 
+import java.net.URI;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -103,7 +108,18 @@ class SpotifyServiceTest {
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyProperties.defaultLimit()).thenReturn(defaultLimit);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
+
+        // Execute the lambda to trigger defaultLimit() call
+        doAnswer(invocation -> {
+            Function<UriBuilder, URI> uriFunction = invocation.getArgument(0);
+            UriBuilder mockUriBuilder = mock(UriBuilder.class);
+            when(mockUriBuilder.path(anyString())).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.queryParam(anyString(), (Object[]) any())).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.build()).thenReturn(URI.create("http://api.spotify.com/v1/me/top/tracks"));
+            uriFunction.apply(mockUriBuilder);
+            return requestHeadersSpec;
+        }).when(requestHeadersUriSpec).uri(any(Function.class));
+
         when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
@@ -361,7 +377,18 @@ class SpotifyServiceTest {
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyProperties.defaultLimit()).thenReturn(defaultLimit);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
+
+        // Execute the lambda to trigger defaultLimit() call
+        doAnswer(invocation -> {
+            Function<UriBuilder, URI> uriFunction = invocation.getArgument(0);
+            UriBuilder mockUriBuilder = mock(UriBuilder.class);
+            when(mockUriBuilder.path(anyString())).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.queryParam(anyString(), (Object[]) any())).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.build()).thenReturn(URI.create("http://api.spotify.com/v1/me/top/artists"));
+            uriFunction.apply(mockUriBuilder);
+            return requestHeadersSpec;
+        }).when(requestHeadersUriSpec).uri(any(Function.class));
+
         when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);

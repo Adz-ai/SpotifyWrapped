@@ -83,6 +83,9 @@ public class SpotifyService {
 
             return new UserTopItemsResponse<>("tracks", response.items().size(), response.items());
 
+        } catch (SpotifyApiException e) {
+            // Re-throw our own exception without wrapping
+            throw e;
         } catch (Exception e) {
             log.error("Failed to fetch top tracks", e);
             throw new SpotifyApiException("Failed to fetch top tracks from Spotify API", 500, e);
@@ -122,6 +125,9 @@ public class SpotifyService {
 
             return new UserTopItemsResponse<>("artists", response.items().size(), response.items());
 
+        } catch (SpotifyApiException e) {
+            // Re-throw our own exception without wrapping
+            throw e;
         } catch (Exception e) {
             log.error("Failed to fetch top artists", e);
             throw new SpotifyApiException("Failed to fetch top artists from Spotify API", 500, e);

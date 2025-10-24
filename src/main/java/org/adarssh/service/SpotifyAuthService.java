@@ -61,6 +61,9 @@ public class SpotifyAuthService {
             log.debug("Successfully obtained Spotify access token");
             return response.accessToken();
 
+        } catch (SpotifyAuthenticationException e) {
+            // Re-throw our own exception without wrapping
+            throw e;
         } catch (Exception e) {
             log.error("Failed to authenticate with Spotify API", e);
             throw new SpotifyAuthenticationException("Failed to authenticate with Spotify API", e);
