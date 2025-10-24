@@ -6,7 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(HealthController.class)
 class HealthControllerTest {
@@ -15,7 +17,7 @@ class HealthControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void health_returnsUpStatus() throws Exception {
+    void healthReturnsUpStatus() throws Exception {
         // when/then
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -24,7 +26,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_returnsJsonContentType() throws Exception {
+    void healthReturnsJsonContentType() throws Exception {
         // when/then
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -32,7 +34,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_doesNotRequireAuthentication() throws Exception {
+    void healthDoesNotRequireAuthentication() throws Exception {
         // when/then - Should succeed without authentication
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -40,7 +42,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_timestampIsNotNull() throws Exception {
+    void healthTimestampIsNotNull() throws Exception {
         // when/then
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -48,7 +50,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_responseContainsRequiredFields() throws Exception {
+    void healthResponseContainsRequiredFields() throws Exception {
         // when/then
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -58,7 +60,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_multipleCallsReturnSuccess() throws Exception {
+    void healthMultipleCallsReturnSuccess() throws Exception {
         // when/then - Call multiple times to verify consistency
         for (int i = 0; i < 3; i++) {
             mockMvc.perform(get("/api/health"))

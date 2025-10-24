@@ -18,13 +18,13 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void openApiConfig_canBeInstantiated() {
+    void openApiConfigCanBeInstantiated() {
         // then
         assertThat(openApiConfig).isNotNull();
     }
 
     @Test
-    void spotifyWrappedOpenApi_beanIsCreated() {
+    void spotifyWrappedOpenApiBeanIsCreated() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -33,7 +33,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasCorrectTitle() {
+    void spotifyWrappedOpenApiHasCorrectTitle() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -43,7 +43,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasCorrectVersion() {
+    void spotifyWrappedOpenApiHasCorrectVersion() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -52,7 +52,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasDescription() {
+    void spotifyWrappedOpenApiHasDescription() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -64,7 +64,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasContact() {
+    void spotifyWrappedOpenApiHasContact() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -76,7 +76,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasLicense() {
+    void spotifyWrappedOpenApiHasLicense() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -88,7 +88,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_hasServers() {
+    void spotifyWrappedOpenApiHasServers() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
@@ -99,27 +99,27 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_serverHasCorrectUrl() {
+    void spotifyWrappedOpenApiServerHasCorrectUrl() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
         // then
-        Server server = openAPI.getServers().get(0);
+        Server server = openAPI.getServers().getFirst();
         assertThat(server.getUrl()).isEqualTo("http://127.0.0.1:8080");
     }
 
     @Test
-    void spotifyWrappedOpenApi_serverHasDescription() {
+    void spotifyWrappedOpenApiServerHasDescription() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
 
         // then
-        Server server = openAPI.getServers().get(0);
+        Server server = openAPI.getServers().getFirst();
         assertThat(server.getDescription()).isEqualTo("Local development server");
     }
 
     @Test
-    void spotifyWrappedOpenApi_infoContainsAllRequiredFields() {
+    void spotifyWrappedOpenApiInfoContainsAllRequiredFields() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
         Info info = openAPI.getInfo();
@@ -134,7 +134,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_descriptionContainsFeatures() {
+    void spotifyWrappedOpenApiDescriptionContainsFeatures() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
         String description = openAPI.getInfo().getDescription();
@@ -146,7 +146,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_descriptionContainsUsageInstructions() {
+    void spotifyWrappedOpenApiDescriptionContainsUsageInstructions() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
         String description = openAPI.getInfo().getDescription();
@@ -158,7 +158,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_descriptionMentionsTopItems() {
+    void spotifyWrappedOpenApiDescriptionMentionsTopItems() {
         // when
         OpenAPI openAPI = openApiConfig.spotifyWrappedOpenApi();
         String description = openAPI.getInfo().getDescription();
@@ -171,7 +171,7 @@ class OpenApiConfigTest {
     }
 
     @Test
-    void spotifyWrappedOpenApi_canBeInstantiatedMultipleTimes() {
+    void spotifyWrappedOpenApiCanBeInstantiatedMultipleTimes() {
         // when
         OpenAPI openAPI1 = openApiConfig.spotifyWrappedOpenApi();
         OpenAPI openAPI2 = openApiConfig.spotifyWrappedOpenApi();

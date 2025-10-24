@@ -1,7 +1,11 @@
 package org.adarssh.integration;
 
 import org.adarssh.config.TestSecurityConfig;
-import org.adarssh.dto.*;
+import org.adarssh.dto.AlbumDto;
+import org.adarssh.dto.ArtistDto;
+import org.adarssh.dto.ExternalUrls;
+import org.adarssh.dto.TrackDto;
+import org.adarssh.dto.UserTopItemsResponse;
 import org.adarssh.service.SpotifyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +41,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_getTopTracks_success() throws Exception {
+    void fullFlowTestGetTopTracksSuccess() throws Exception {
         // given
         AlbumDto album = new AlbumDto("album1", "Test Album", "album", "2024-01-01",
                 List.of(), List.of(), new ExternalUrls("https://spotify.com"));
@@ -57,7 +64,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_getTopArtists_success() throws Exception {
+    void fullFlowTestGetTopArtistsSuccess() throws Exception {
         // given
         ArtistDto artist = new ArtistDto("artist1", "Test Artist", List.of("rock", "pop"),
                 90, new ExternalUrls("https://spotify.com"), List.of());
@@ -79,7 +86,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_getTopAlbums_success() throws Exception {
+    void fullFlowTestGetTopAlbumsSuccess() throws Exception {
         // given
         AlbumDto album = new AlbumDto("album1", "Test Album", "album", "2024-01-01",
                 List.of(), List.of(), new ExternalUrls("https://spotify.com"));
@@ -99,7 +106,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_getTopGenres_success() throws Exception {
+    void fullFlowTestGetTopGenresSuccess() throws Exception {
         // given
         UserTopItemsResponse<String> mockResponse = new UserTopItemsResponse<>(
                 "genres", 3, List.of("rock", "indie", "pop"));
@@ -119,7 +126,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_getSpotifyWrapped_success() throws Exception {
+    void fullFlowTestGetSpotifyWrappedSuccess() throws Exception {
         // given
         AlbumDto album = new AlbumDto("album1", "Test Album", "album", "2024-01-01",
                 List.of(), List.of(), new ExternalUrls("https://spotify.com"));
@@ -161,7 +168,7 @@ class SpotifyApiIntegrationTest {
     }
 
     @Test
-    void fullFlowTest_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void fullFlowTestWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
@@ -186,7 +193,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser
-    void fullFlowTest_withInvalidLimitParameter_returnsBadRequest() throws Exception {
+    void fullFlowTestWithInvalidLimitParameterReturnsBadRequest() throws Exception {
         // when/then - Test various invalid limits
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "0"))
                 .andExpect(status().isBadRequest());
@@ -204,7 +211,7 @@ class SpotifyApiIntegrationTest {
     }
 
     @Test
-    void healthEndpoint_alwaysAccessible() throws Exception {
+    void healthEndpointAlwaysAccessible() throws Exception {
         // when/then - Health endpoint should not require authentication
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
@@ -213,7 +220,7 @@ class SpotifyApiIntegrationTest {
     }
 
     @Test
-    void homeEndpoint_accessibleWithoutAuthentication() throws Exception {
+    void homeEndpointAccessibleWithoutAuthentication() throws Exception {
         // when/then - Home endpoint should be accessible without authentication
         mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
@@ -223,7 +230,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser(username = "testuser")
-    void fullFlowTest_multipleEndpointsWithSameLimit_success() throws Exception {
+    void fullFlowTestMultipleEndpointsWithSameLimitSuccess() throws Exception {
         // given
         int limit = 10;
 
@@ -257,7 +264,7 @@ class SpotifyApiIntegrationTest {
 
     @Test
     @WithMockUser
-    void fullFlowTest_boundaryValues_success() throws Exception {
+    void fullFlowTestBoundaryValuesSuccess() throws Exception {
         // given
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());

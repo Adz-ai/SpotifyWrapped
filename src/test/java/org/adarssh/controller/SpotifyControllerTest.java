@@ -1,6 +1,10 @@
 package org.adarssh.controller;
 
-import org.adarssh.dto.*;
+import org.adarssh.dto.AlbumDto;
+import org.adarssh.dto.ArtistDto;
+import org.adarssh.dto.ExternalUrls;
+import org.adarssh.dto.TrackDto;
+import org.adarssh.dto.UserTopItemsResponse;
 import org.adarssh.service.SpotifyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +16,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SpotifyController.class)
 class SpotifyControllerTest {
@@ -30,7 +38,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withValidLimit_returnsOk() throws Exception {
+    void getTopTracksWithValidLimitReturnsOk() throws Exception {
         // given
         int limit = 5;
         AlbumDto album = new AlbumDto("album1", "Test Album", "album", "2024-01-01",
@@ -54,7 +62,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withDefaultLimit_returnsOk() throws Exception {
+    void getTopTracksWithDefaultLimitReturnsOk() throws Exception {
         // given
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());
@@ -71,7 +79,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withLimit10_returnsOk() throws Exception {
+    void getTopTracksWithLimit10ReturnsOk() throws Exception {
         // given
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());
@@ -87,7 +95,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withLimit50_returnsOk() throws Exception {
+    void getTopTracksWithLimit50ReturnsOk() throws Exception {
         // given
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());
@@ -103,7 +111,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withInvalidLimitZero_returnsBadRequest() throws Exception {
+    void getTopTracksWithInvalidLimitZeroReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "0"))
                 .andExpect(status().isBadRequest());
@@ -113,7 +121,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withInvalidLimitNegative_returnsBadRequest() throws Exception {
+    void getTopTracksWithInvalidLimitNegativeReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "-1"))
                 .andExpect(status().isBadRequest());
@@ -123,7 +131,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withInvalidLimitTooHigh_returnsBadRequest() throws Exception {
+    void getTopTracksWithInvalidLimitTooHighReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "51"))
                 .andExpect(status().isBadRequest());
@@ -133,7 +141,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopTracks_withInvalidLimit100_returnsBadRequest() throws Exception {
+    void getTopTracksWithInvalidLimit100ReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "100"))
                 .andExpect(status().isBadRequest());
@@ -142,7 +150,7 @@ class SpotifyControllerTest {
     }
 
     @Test
-    void getTopTracks_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void getTopTracksWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
@@ -152,7 +160,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopArtists_withValidLimit_returnsOk() throws Exception {
+    void getTopArtistsWithValidLimitReturnsOk() throws Exception {
         // given
         int limit = 10;
         ArtistDto artist = new ArtistDto("artist1", "Test Artist", List.of("rock"),
@@ -174,7 +182,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopArtists_withInvalidLimit_returnsBadRequest() throws Exception {
+    void getTopArtistsWithInvalidLimitReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/artists").param("limit", "0"))
                 .andExpect(status().isBadRequest());
@@ -183,7 +191,7 @@ class SpotifyControllerTest {
     }
 
     @Test
-    void getTopArtists_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void getTopArtistsWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/artists").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
@@ -193,7 +201,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopAlbums_withValidLimit_returnsOk() throws Exception {
+    void getTopAlbumsWithValidLimitReturnsOk() throws Exception {
         // given
         int limit = 5;
         AlbumDto album = new AlbumDto("album1", "Test Album", "album", "2024-01-01",
@@ -215,7 +223,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopAlbums_withInvalidLimit_returnsBadRequest() throws Exception {
+    void getTopAlbumsWithInvalidLimitReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/albums").param("limit", "51"))
                 .andExpect(status().isBadRequest());
@@ -224,7 +232,7 @@ class SpotifyControllerTest {
     }
 
     @Test
-    void getTopAlbums_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void getTopAlbumsWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/albums").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
@@ -234,7 +242,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopGenres_withValidLimit_returnsOk() throws Exception {
+    void getTopGenresWithValidLimitReturnsOk() throws Exception {
         // given
         int limit = 10;
         UserTopItemsResponse<String> mockResponse = new UserTopItemsResponse<>(
@@ -256,7 +264,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getTopGenres_withInvalidLimit_returnsBadRequest() throws Exception {
+    void getTopGenresWithInvalidLimitReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/genres").param("limit", "-5"))
                 .andExpect(status().isBadRequest());
@@ -265,7 +273,7 @@ class SpotifyControllerTest {
     }
 
     @Test
-    void getTopGenres_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void getTopGenresWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/top/genres").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
@@ -275,7 +283,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getSpotifyWrapped_withValidLimit_returnsCompleteData() throws Exception {
+    void getSpotifyWrappedWithValidLimitReturnsCompleteData() throws Exception {
         // given
         int limit = 5;
         TrackDto track = new TrackDto("track1", "Test Track", null, List.of(),
@@ -319,7 +327,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getSpotifyWrapped_withDefaultLimit_returnsCompleteData() throws Exception {
+    void getSpotifyWrappedWithDefaultLimitReturnsCompleteData() throws Exception {
         // given
         UserTopItemsResponse<TrackDto> tracksResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());
@@ -351,7 +359,7 @@ class SpotifyControllerTest {
 
     @Test
     @WithMockUser
-    void getSpotifyWrapped_withInvalidLimit_returnsBadRequest() throws Exception {
+    void getSpotifyWrappedWithInvalidLimitReturnsBadRequest() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/wrapped").param("limit", "0"))
                 .andExpect(status().isBadRequest());
@@ -363,7 +371,7 @@ class SpotifyControllerTest {
     }
 
     @Test
-    void getSpotifyWrapped_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void getSpotifyWrappedWithoutAuthenticationReturnsUnauthorized() throws Exception {
         // when/then
         mockMvc.perform(get("/api/spotify/wrapped").param("limit", "5"))
                 .andExpect(status().isUnauthorized());

@@ -1,7 +1,5 @@
 package org.adarssh.exception;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,9 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -31,7 +26,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyAuthenticationException_returnsUnauthorizedResponse() {
+    void handleSpotifyAuthenticationExceptionReturnsUnauthorizedResponse() {
         // given
         SpotifyAuthenticationException exception = new SpotifyAuthenticationException(
                 "Failed to authenticate with Spotify");
@@ -52,7 +47,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyAuthenticationException_withDifferentMessage_returnsCorrectMessage() {
+    void handleSpotifyAuthenticationExceptionWithDifferentMessageReturnsCorrectMessage() {
         // given
         SpotifyAuthenticationException exception = new SpotifyAuthenticationException(
                 "Invalid credentials");
@@ -69,7 +64,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyApiException_returnsCorrectStatusCode() {
+    void handleSpotifyApiExceptionReturnsCorrectStatusCode() {
         // given
         SpotifyApiException exception = new SpotifyApiException("API Error", 500);
         when(webRequest.getDescription(false)).thenReturn("uri=/api/spotify/top/tracks");
@@ -88,7 +83,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyApiException_with404Status_returnsNotFound() {
+    void handleSpotifyApiExceptionWith404StatusReturnsNotFound() {
         // given
         SpotifyApiException exception = new SpotifyApiException("Resource not found", 404);
         when(webRequest.getDescription(false)).thenReturn("uri=/api/spotify/top/albums");
@@ -105,7 +100,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyApiException_with400Status_returnsBadRequest() {
+    void handleSpotifyApiExceptionWith400StatusReturnsBadRequest() {
         // given
         SpotifyApiException exception = new SpotifyApiException("Invalid request", 400);
         when(webRequest.getDescription(false)).thenReturn("uri=/api/spotify/top/genres");
@@ -121,7 +116,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleGlobalException_returnsInternalServerError() {
+    void handleGlobalExceptionReturnsInternalServerError() {
         // given
         Exception exception = new RuntimeException("Unexpected error occurred");
         when(webRequest.getDescription(false)).thenReturn("uri=/api/spotify/wrapped");
@@ -141,7 +136,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleGlobalException_withNullPointerException_returnsGenericMessage() {
+    void handleGlobalExceptionWithNullPointerExceptionReturnsGenericMessage() {
         // given
         Exception exception = new NullPointerException("Null value encountered");
         when(webRequest.getDescription(false)).thenReturn("uri=/api/health");
@@ -157,7 +152,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleGlobalException_withIllegalArgumentException_returnsInternalServerError() {
+    void handleGlobalExceptionWithIllegalArgumentExceptionReturnsInternalServerError() {
         // given
         Exception exception = new IllegalArgumentException("Invalid argument");
         when(webRequest.getDescription(false)).thenReturn("uri=/api/test");
@@ -173,7 +168,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void errorResponse_containsAllRequiredFields() {
+    void errorResponseContainsAllRequiredFields() {
         // given
         SpotifyApiException exception = new SpotifyApiException("Test error", 500);
         when(webRequest.getDescription(false)).thenReturn("uri=/api/test");
@@ -193,7 +188,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyApiException_withCause_stillReturnsCorrectResponse() {
+    void handleSpotifyApiExceptionWithCauseStillReturnsCorrectResponse() {
         // given
         Throwable cause = new RuntimeException("Root cause");
         SpotifyApiException exception = new SpotifyApiException("Wrapped error", 503, cause);
@@ -211,7 +206,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleSpotifyAuthenticationException_withCause_returnsUnauthorized() {
+    void handleSpotifyAuthenticationExceptionWithCauseReturnsUnauthorized() {
         // given
         Throwable cause = new RuntimeException("OAuth error");
         SpotifyAuthenticationException exception = new SpotifyAuthenticationException(
@@ -229,7 +224,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void allExceptionHandlers_returnTimestampInResponse() {
+    void allExceptionHandlersReturnTimestampInResponse() {
         // given
         when(webRequest.getDescription(false)).thenReturn("uri=/api/test");
 

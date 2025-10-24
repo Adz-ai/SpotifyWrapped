@@ -1,7 +1,12 @@
 package org.adarssh.service;
 
 import org.adarssh.config.SpotifyProperties;
-import org.adarssh.dto.*;
+import org.adarssh.dto.AlbumDto;
+import org.adarssh.dto.ArtistDto;
+import org.adarssh.dto.ExternalUrls;
+import org.adarssh.dto.SpotifyPagedResponse;
+import org.adarssh.dto.TrackDto;
+import org.adarssh.dto.UserTopItemsResponse;
 import org.adarssh.exception.SpotifyApiException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SpotifyServiceTest {
@@ -48,7 +55,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopTracks_withValidLimit_returnsTracksSuccessfully() {
+    void getTopTracksWithValidLimitReturnsTracksSuccessfully() {
         // given
         int limit = 5;
         String accessToken = "test-access-token";
@@ -85,7 +92,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopTracks_withNullLimit_usesDefaultLimit() {
+    void getTopTracksWithNullLimitUsesDefaultLimit() {
         // given
         String accessToken = "test-access-token";
         int defaultLimit = 10;
@@ -111,7 +118,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopTracks_whenNullResponse_throwsException() {
+    void getTopTracksWhenNullResponseThrowsException() {
         // given
         when(oauth2TokenService.getUserAccessToken()).thenReturn("token");
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -127,7 +134,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopTracks_whenApiThrowsException_throwsSpotifyApiException() {
+    void getTopTracksWhenApiThrowsExceptionThrowsSpotifyApiException() {
         // given
         when(oauth2TokenService.getUserAccessToken()).thenReturn("token");
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -142,7 +149,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopArtists_withValidLimit_returnsArtistsSuccessfully() {
+    void getTopArtistsWithValidLimitReturnsArtistsSuccessfully() {
         // given
         int limit = 10;
         String accessToken = "test-access-token";
@@ -173,7 +180,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopArtists_whenNullResponse_throwsException() {
+    void getTopArtistsWhenNullResponseThrowsException() {
         // given
         when(oauth2TokenService.getUserAccessToken()).thenReturn("token");
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -189,7 +196,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopArtists_whenApiThrowsException_throwsSpotifyApiException() {
+    void getTopArtistsWhenApiThrowsExceptionThrowsSpotifyApiException() {
         // given
         when(oauth2TokenService.getUserAccessToken()).thenReturn("token");
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -204,7 +211,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopAlbums_extractsAlbumsFromTopTracks() {
+    void getTopAlbumsExtractsAlbumsFromTopTracks() {
         // given
         int limit = 5;
         String accessToken = "test-access-token";
@@ -243,7 +250,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopAlbums_limitsResultsToSpecifiedLimit() {
+    void getTopAlbumsLimitsResultsToSpecifiedLimit() {
         // given
         int limit = 1;
         String accessToken = "test-access-token";
@@ -277,7 +284,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopGenres_extractsGenresFromTopArtists() {
+    void getTopGenresExtractsGenresFromTopArtists() {
         // given
         int limit = 5;
         String accessToken = "test-access-token";
@@ -311,7 +318,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopGenres_limitsResultsToSpecifiedLimit() {
+    void getTopGenresLimitsResultsToSpecifiedLimit() {
         // given
         int limit = 2;
         String accessToken = "test-access-token";
@@ -340,7 +347,7 @@ class SpotifyServiceTest {
     }
 
     @Test
-    void getTopGenres_withNullLimit_usesDefaultLimit() {
+    void getTopGenresWithNullLimitUsesDefaultLimit() {
         // given
         String accessToken = "test-access-token";
         int defaultLimit = 10;

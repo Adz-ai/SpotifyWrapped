@@ -14,8 +14,13 @@ import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SpotifyAuthServiceTest {
@@ -43,7 +48,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_withValidCredentials_returnsToken() {
+    void obtainAccessTokenWithValidCredentialsReturnsToken() {
         // given
         String clientId = "test-client-id";
         String clientSecret = "test-client-secret";
@@ -73,7 +78,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_whenResponseIsNull_throwsException() {
+    void obtainAccessTokenWhenResponseIsNullThrowsException() {
         // given
         String clientId = "test-client-id";
         String clientSecret = "test-client-secret";
@@ -95,7 +100,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_whenTokenIsNull_throwsException() {
+    void obtainAccessTokenWhenTokenIsNullThrowsException() {
         // given
         String clientId = "test-client-id";
         String clientSecret = "test-client-secret";
@@ -120,7 +125,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_whenApiThrowsException_throwsSpotifyAuthenticationException() {
+    void obtainAccessTokenWhenApiThrowsExceptionThrowsSpotifyAuthenticationException() {
         // given
         String clientId = "test-client-id";
         String clientSecret = "test-client-secret";
@@ -142,7 +147,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_sendsCorrectAuthorizationHeader() {
+    void obtainAccessTokenSendsCorrectAuthorizationHeader() {
         // given
         String clientId = "myClientId";
         String clientSecret = "mySecret";
@@ -170,7 +175,7 @@ class SpotifyAuthServiceTest {
     }
 
     @Test
-    void obtainAccessToken_sendsClientCredentialsGrantType() {
+    void obtainAccessTokenSendsClientCredentialsGrantType() {
         // given
         String clientId = "test-id";
         String clientSecret = "test-secret";

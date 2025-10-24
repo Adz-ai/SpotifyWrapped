@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -13,7 +12,9 @@ import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(HomeController.class)
 class HomeControllerTest {
@@ -22,7 +23,7 @@ class HomeControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void home_whenAuthenticated_returnsUserInfoAndEndpoints() throws Exception {
+    void homeWhenAuthenticatedReturnsUserInfoAndEndpoints() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("display_name", "John Doe");
@@ -48,7 +49,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_whenAuthenticatedWithDifferentUsername_returnsCorrectUsername() throws Exception {
+    void homeWhenAuthenticatedWithDifferentUsernameReturnsCorrectUsername() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("display_name", "Jane Smith");
@@ -67,7 +68,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_whenNotAuthenticated_returnsLoginUrl() throws Exception {
+    void homeWhenNotAuthenticatedReturnsLoginUrl() throws Exception {
         // when/then
         mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
@@ -79,7 +80,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_whenAuthenticatedWithNullDisplayName_returnsNullUser() throws Exception {
+    void homeWhenAuthenticatedWithNullDisplayNameReturnsNullUser() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("display_name", null);
@@ -98,7 +99,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_whenAuthenticatedWithoutDisplayName_returnsNullUser() throws Exception {
+    void homeWhenAuthenticatedWithoutDisplayNameReturnsNullUser() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
         OAuth2User oauth2User = new DefaultOAuth2User(
@@ -116,7 +117,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_alwaysReturnsJsonContentType() throws Exception {
+    void homeAlwaysReturnsJsonContentType() throws Exception {
         // when/then
         mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
@@ -124,7 +125,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_authenticatedResponseContainsAllRequiredFields() throws Exception {
+    void homeAuthenticatedResponseContainsAllRequiredFields() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("display_name", "Test User");
@@ -146,7 +147,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void home_unauthenticatedResponseContainsAllRequiredFields() throws Exception {
+    void homeUnauthenticatedResponseContainsAllRequiredFields() throws Exception {
         // when/then
         mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())

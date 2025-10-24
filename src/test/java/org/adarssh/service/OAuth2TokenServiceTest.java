@@ -16,7 +16,9 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OAuth2TokenServiceTest {
@@ -45,7 +47,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_withValidAuthentication_returnsToken() {
+    void getUserAccessTokenWithValidAuthenticationReturnsToken() {
         // given
         String expectedToken = "test-access-token-12345";
         String clientRegistrationId = "spotify";
@@ -69,7 +71,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_whenNotAuthenticated_throwsIllegalStateException() {
+    void getUserAccessTokenWhenNotAuthenticatedThrowsIllegalStateException() {
         // given
         when(securityContext.getAuthentication()).thenReturn(null);
 
@@ -80,7 +82,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_whenNotOAuth2Authentication_throwsIllegalStateException() {
+    void getUserAccessTokenWhenNotOAuth2AuthenticationThrowsIllegalStateException() {
         // given
         Authentication nonOAuthAuth = new UsernamePasswordAuthenticationToken("user", "password");
         when(securityContext.getAuthentication()).thenReturn(nonOAuthAuth);
@@ -92,7 +94,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_whenAuthorizedClientIsNull_throwsIllegalStateException() {
+    void getUserAccessTokenWhenAuthorizedClientIsNullThrowsIllegalStateException() {
         // given
         String clientRegistrationId = "spotify";
         String principalName = "testUser";
@@ -110,7 +112,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_whenAccessTokenIsNull_throwsIllegalStateException() {
+    void getUserAccessTokenWhenAccessTokenIsNullThrowsIllegalStateException() {
         // given
         String clientRegistrationId = "spotify";
         String principalName = "testUser";
@@ -129,7 +131,7 @@ class OAuth2TokenServiceTest {
     }
 
     @Test
-    void getUserAccessToken_logsDebugMessageWithUsername() {
+    void getUserAccessTokenLogsDebugMessageWithUsername() {
         // given
         String expectedToken = "test-token";
         String clientRegistrationId = "spotify";
