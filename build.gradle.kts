@@ -35,6 +35,12 @@ dependencies {
     // Logging
     implementation("org.springframework.boot:spring-boot-starter-logging")
 
+    // API Documentation (Swagger/OpenAPI)
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+
+    // Monitoring and Health Checks
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // Lombok (optional but recommended for reducing boilerplate)
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

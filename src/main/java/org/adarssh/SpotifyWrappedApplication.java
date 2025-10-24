@@ -23,10 +23,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * All endpoints accept an optional 'limit' query parameter (default: 5)
  */
 @SpringBootApplication
-@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class SpotifyWrappedApplication {
 
-    void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(SpotifyWrappedApplication.class, args);
     }
 }

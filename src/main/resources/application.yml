@@ -45,3 +45,42 @@ logging:
     org.springframework.web: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# Application Info (for /actuator/info)
+info:
+  app:
+    name: Spotify Wrapped API
+    description: A modern REST API to access your Spotify listening habits
+    version: 1.0.0
+    java-version: ${java.version}
+
+# OpenAPI/Swagger Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    display-request-duration: true
+    doc-expansion: none

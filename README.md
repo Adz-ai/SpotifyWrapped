@@ -78,17 +78,37 @@ Then open `http://127.0.0.1:3000` in your browser and login with Spotify!
 
 ## API Endpoints
 
-The backend exposes the following REST endpoints (requires authentication):
+The backend exposes the following REST endpoints (most require authentication):
 
 - `GET /api/` - Check authentication status
 - `GET /api/health` - Health check
 - `GET /api/spotify/wrapped?limit=10` - Get all top items at once
-- `GET /api/spotify/top/tracks?limit=10` - Get top tracks
-- `GET /api/spotify/top/artists?limit=10` - Get top artists
-- `GET /api/spotify/top/albums?limit=10` - Get top albums
-- `GET /api/spotify/top/genres?limit=10` - Get top genres
+- `GET /api/spotify/top/tracks?limit=10` - Get top tracks (1-50)
+- `GET /api/spotify/top/artists?limit=10` - Get top artists (1-50)
+- `GET /api/spotify/top/albums?limit=10` - Get top albums (1-50)
+- `GET /api/spotify/top/genres?limit=10` - Get top genres (1-50)
 
-All endpoints return JSON responses with proper error handling.
+All endpoints return JSON responses with proper error handling and input validation.
+
+### API Documentation (Swagger)
+
+Interactive API documentation is available at:
+- **Swagger UI**: `http://127.0.0.1:8080/swagger-ui.html`
+- **OpenAPI JSON**: `http://127.0.0.1:8080/api-docs`
+
+The Swagger UI provides:
+- Interactive API explorer
+- Request/response examples
+- Parameter validation details
+- Try-it-out functionality
+
+### Monitoring Endpoints (Actuator)
+
+Health and monitoring endpoints:
+- **Health**: `http://127.0.0.1:8080/actuator/health` - Application health status
+- **Info**: `http://127.0.0.1:8080/actuator/info` - Application information
+- **Metrics**: `http://127.0.0.1:8080/actuator/metrics` - Application metrics
+- **Environment**: `http://127.0.0.1:8080/actuator/env` - Environment properties
 
 ## Architecture
 
@@ -99,9 +119,10 @@ src/main/java/org/adarssh/
 ├── config/
 │   ├── SecurityConfig.java         # OAuth2 + CORS configuration
 │   ├── SpotifyProperties.java      # Configuration properties
-│   └── RestClientConfig.java       # RestClient beans
+│   ├── RestClientConfig.java       # RestClient beans
+│   └── OpenApiConfig.java          # Swagger/OpenAPI configuration
 ├── controller/
-│   ├── SpotifyController.java      # REST endpoints
+│   ├── SpotifyController.java      # REST endpoints with OpenAPI annotations
 │   ├── HomeController.java         # Auth status endpoint
 │   └── HealthController.java       # Health check
 ├── service/
@@ -141,6 +162,9 @@ frontend/src/
 - Java 21 with records and modern features
 - Spring Boot 3.2.2
 - Spring Security OAuth2 Client
+- Spring Boot Actuator - Health checks and monitoring
+- SpringDoc OpenAPI 3 - API documentation (Swagger)
+- Jakarta Bean Validation - Input validation
 - RestClient (Spring 6.1+)
 - Gradle 8.5
 

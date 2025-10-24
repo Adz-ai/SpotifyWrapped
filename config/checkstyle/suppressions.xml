@@ -14,4 +14,7 @@
     <!-- Suppress line length for application.yml -->
     <suppress checks="LineLength" files="application\.yml"/>
     <suppress checks="LineLength" files="application\.properties"/>
+
+    <!-- Suppress HideUtilityClassConstructor for Spring Boot main application class -->
+    <suppress checks="HideUtilityClassConstructor" files=".*Application\.java"/>
 </suppressions>

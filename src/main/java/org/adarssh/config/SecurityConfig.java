@@ -26,7 +26,17 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for frontend proxy setup
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login**", "/error", "/api/**").permitAll()
+                .requestMatchers(
+                    "/",
+                    "/login**",
+                    "/error",
+                    "/api/**",
+                    "/actuator/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/v3/api-docs/**",
+                    "/api-docs/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
