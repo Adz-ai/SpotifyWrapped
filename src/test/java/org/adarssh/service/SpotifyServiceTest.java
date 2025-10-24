@@ -178,7 +178,18 @@ class SpotifyServiceTest {
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
+
+        // Actually execute the URI builder function to get coverage
+        doAnswer(invocation -> {
+            Function<UriBuilder, URI> uriFunction = invocation.getArgument(0);
+            UriBuilder mockUriBuilder = mock(UriBuilder.class);
+            when(mockUriBuilder.path(anyString())).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.queryParam(anyString(), any(Object[].class))).thenReturn(mockUriBuilder);
+            when(mockUriBuilder.build()).thenReturn(URI.create("http://api.spotify.com/me/top/artists"));
+            uriFunction.apply(mockUriBuilder);  // Execute the lambda
+            return requestHeadersSpec;
+        }).when(requestHeadersUriSpec).uri(any(Function.class));
+
         when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
@@ -224,6 +235,101 @@ class SpotifyServiceTest {
         assertThatThrownBy(() -> spotifyService.getTopArtists(10, "medium_term"))
                 .isInstanceOf(SpotifyApiException.class)
                 .hasMessageContaining("Failed to fetch top artists from Spotify API");
+    }
+
+    @Test
+    void getCurrentUsernameReturnsUsernameWhenAuthenticated() {
+        // given
+        org.springframework.security.core.Authentication authentication =
+                org.mockito.Mockito.mock(org.springframework.security.core.Authentication.class);
+        when(authentication.getName()).thenReturn("testuser");
+        org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .setAuthentication(authentication);
+
+        // when
+        String username = spotifyService.getCurrentUsername();
+
+        // then
+        assertThat(username).isEqualTo("testuser");
+
+        // cleanup
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void getCurrentUsernameReturnsAnonymousWhenNotAuthenticated() {
+        // given
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
+
+        // when
+        String username = spotifyService.getCurrentUsername();
+
+        // then
+        assertThat(username).isEqualTo("anonymous");
+    }
+
+    @Test
+    void getCurrentUsernameReturnsAnonymousWhenAuthenticationIsNull() {
+        // given
+        org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .setAuthentication(null);
+
+        // when
+        String username = spotifyService.getCurrentUsername();
+
+        // then
+        assertThat(username).isEqualTo("anonymous");
+
+        // cleanup
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void getTopTracksFallbackReturnsEmptyResponse() throws Exception {
+        // given
+        Integer limit = 5;
+        String timeRange = "medium_term";
+        Exception testException = new RuntimeException("Spotify API unavailable");
+
+        // Use reflection to access private fallback method
+        var method = SpotifyService.class.getDeclaredMethod(
+                "getTopTracksFallback", Integer.class, String.class, Exception.class);
+        method.setAccessible(true);
+
+        // when
+        @SuppressWarnings("unchecked")
+        UserTopItemsResponse<TrackDto> result =
+                (UserTopItemsResponse<TrackDto>) method.invoke(spotifyService, limit, timeRange, testException);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.type()).isEqualTo("tracks");
+        assertThat(result.count()).isEqualTo(0);
+        assertThat(result.items()).isEmpty();
+    }
+
+    @Test
+    void getTopArtistsFallbackReturnsEmptyResponse() throws Exception {
+        // given
+        Integer limit = 5;
+        String timeRange = "medium_term";
+        Exception testException = new RuntimeException("Spotify API unavailable");
+
+        // Use reflection to access private fallback method
+        var method = SpotifyService.class.getDeclaredMethod(
+                "getTopArtistsFallback", Integer.class, String.class, Exception.class);
+        method.setAccessible(true);
+
+        // when
+        @SuppressWarnings("unchecked")
+        UserTopItemsResponse<ArtistDto> result =
+                (UserTopItemsResponse<ArtistDto>) method.invoke(spotifyService, limit, timeRange, testException);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.type()).isEqualTo("artists");
+        assertThat(result.count()).isEqualTo(0);
+        assertThat(result.items()).isEmpty();
     }
 
 }

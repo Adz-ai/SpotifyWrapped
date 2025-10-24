@@ -144,6 +144,9 @@ tasks.jacocoTestCoverageVerification {
                 value = "COVEREDRATIO"
                 minimum = "0.80".toBigDecimal() // 80% minimum per class
             }
+            excludes = listOf(
+                "org.adarssh.SpotifyWrappedApplication" // Main class - tested via @SpringBootTest
+            )
         }
     }
 }
