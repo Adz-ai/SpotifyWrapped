@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,7 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 1, List.of(track));
 
-        when(spotifyService.getTopTracks(5)).thenReturn(mockResponse);
+        when(spotifyService.getTopTracks(5, "medium_term")).thenReturn(mockResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "5"))
@@ -59,7 +60,7 @@ class SpotifyApiIntegrationTest {
                 .andExpect(jsonPath("$.count").value(1))
                 .andExpect(jsonPath("$.items[0].name").value("Test Track"));
 
-        verify(spotifyService).getTopTracks(5);
+        verify(spotifyService).getTopTracks(5, "medium_term");
     }
 
     @Test
@@ -71,7 +72,7 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<ArtistDto> mockResponse = new UserTopItemsResponse<>(
                 "artists", 1, List.of(artist));
 
-        when(spotifyService.getTopArtists(10)).thenReturn(mockResponse);
+        when(spotifyService.getTopArtists(10, "medium_term")).thenReturn(mockResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/top/artists").param("limit", "10"))
@@ -81,7 +82,7 @@ class SpotifyApiIntegrationTest {
                 .andExpect(jsonPath("$.items[0].name").value("Test Artist"))
                 .andExpect(jsonPath("$.items[0].genres[0]").value("rock"));
 
-        verify(spotifyService).getTopArtists(10);
+        verify(spotifyService).getTopArtists(10, "medium_term");
     }
 
     @Test
@@ -93,7 +94,7 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<AlbumDto> mockResponse = new UserTopItemsResponse<>(
                 "albums", 1, List.of(album));
 
-        when(spotifyService.getTopAlbums(5)).thenReturn(mockResponse);
+        when(spotifyService.getTopAlbums(5, "medium_term")).thenReturn(mockResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/top/albums").param("limit", "5"))
@@ -101,7 +102,7 @@ class SpotifyApiIntegrationTest {
                 .andExpect(jsonPath("$.type").value("albums"))
                 .andExpect(jsonPath("$.items[0].name").value("Test Album"));
 
-        verify(spotifyService).getTopAlbums(5);
+        verify(spotifyService).getTopAlbums(5, "medium_term");
     }
 
     @Test
@@ -111,7 +112,7 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<String> mockResponse = new UserTopItemsResponse<>(
                 "genres", 3, List.of("rock", "indie", "pop"));
 
-        when(spotifyService.getTopGenres(5)).thenReturn(mockResponse);
+        when(spotifyService.getTopGenres(5, "medium_term")).thenReturn(mockResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/top/genres").param("limit", "5"))
@@ -121,7 +122,7 @@ class SpotifyApiIntegrationTest {
                 .andExpect(jsonPath("$.items[1]").value("indie"))
                 .andExpect(jsonPath("$.items[2]").value("pop"));
 
-        verify(spotifyService).getTopGenres(5);
+        verify(spotifyService).getTopGenres(5, "medium_term");
     }
 
     @Test
@@ -144,10 +145,10 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<String> genresResponse = new UserTopItemsResponse<>(
                 "genres", 1, List.of("rock"));
 
-        when(spotifyService.getTopTracks(5)).thenReturn(tracksResponse);
-        when(spotifyService.getTopArtists(5)).thenReturn(artistsResponse);
-        when(spotifyService.getTopAlbums(5)).thenReturn(albumsResponse);
-        when(spotifyService.getTopGenres(5)).thenReturn(genresResponse);
+        when(spotifyService.getTopTracks(5, "medium_term")).thenReturn(tracksResponse);
+        when(spotifyService.getTopArtists(5, "medium_term")).thenReturn(artistsResponse);
+        when(spotifyService.getTopAlbums(5, "medium_term")).thenReturn(albumsResponse);
+        when(spotifyService.getTopGenres(5, "medium_term")).thenReturn(genresResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/wrapped").param("limit", "5"))
@@ -161,10 +162,10 @@ class SpotifyApiIntegrationTest {
                 .andExpect(jsonPath("$.topAlbums.type").value("albums"))
                 .andExpect(jsonPath("$.topGenres.type").value("genres"));
 
-        verify(spotifyService).getTopTracks(5);
-        verify(spotifyService).getTopArtists(5);
-        verify(spotifyService).getTopAlbums(5);
-        verify(spotifyService).getTopGenres(5);
+        verify(spotifyService).getTopTracks(5, "medium_term");
+        verify(spotifyService).getTopArtists(5, "medium_term");
+        verify(spotifyService).getTopAlbums(5, "medium_term");
+        verify(spotifyService).getTopGenres(5, "medium_term");
     }
 
     @Test
@@ -185,10 +186,10 @@ class SpotifyApiIntegrationTest {
         mockMvc.perform(get("/api/spotify/wrapped").param("limit", "5"))
                 .andExpect(status().isUnauthorized());
 
-        verify(spotifyService, never()).getTopTracks(anyInt());
-        verify(spotifyService, never()).getTopArtists(anyInt());
-        verify(spotifyService, never()).getTopAlbums(anyInt());
-        verify(spotifyService, never()).getTopGenres(anyInt());
+        verify(spotifyService, never()).getTopTracks(anyInt(), anyString());
+        verify(spotifyService, never()).getTopArtists(anyInt(), anyString());
+        verify(spotifyService, never()).getTopAlbums(anyInt(), anyString());
+        verify(spotifyService, never()).getTopGenres(anyInt(), anyString());
     }
 
     @Test
@@ -207,7 +208,7 @@ class SpotifyApiIntegrationTest {
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "100"))
                 .andExpect(status().isBadRequest());
 
-        verify(spotifyService, never()).getTopTracks(anyInt());
+        verify(spotifyService, never()).getTopTracks(anyInt(), anyString());
     }
 
     @Test
@@ -246,8 +247,8 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<ArtistDto> artistsResponse = new UserTopItemsResponse<>(
                 "artists", 1, List.of(artist));
 
-        when(spotifyService.getTopTracks(limit)).thenReturn(tracksResponse);
-        when(spotifyService.getTopArtists(limit)).thenReturn(artistsResponse);
+        when(spotifyService.getTopTracks(limit, "medium_term")).thenReturn(tracksResponse);
+        when(spotifyService.getTopArtists(limit, "medium_term")).thenReturn(artistsResponse);
 
         // when/then
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", String.valueOf(limit)))
@@ -258,8 +259,8 @@ class SpotifyApiIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(1));
 
-        verify(spotifyService).getTopTracks(limit);
-        verify(spotifyService).getTopArtists(limit);
+        verify(spotifyService).getTopTracks(limit, "medium_term");
+        verify(spotifyService).getTopArtists(limit, "medium_term");
     }
 
     @Test
@@ -269,8 +270,8 @@ class SpotifyApiIntegrationTest {
         UserTopItemsResponse<TrackDto> mockResponse = new UserTopItemsResponse<>(
                 "tracks", 0, List.of());
 
-        when(spotifyService.getTopTracks(1)).thenReturn(mockResponse);
-        when(spotifyService.getTopTracks(50)).thenReturn(mockResponse);
+        when(spotifyService.getTopTracks(1, "medium_term")).thenReturn(mockResponse);
+        when(spotifyService.getTopTracks(50, "medium_term")).thenReturn(mockResponse);
 
         // when/then - Test minimum valid limit
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "1"))
@@ -280,7 +281,7 @@ class SpotifyApiIntegrationTest {
         mockMvc.perform(get("/api/spotify/top/tracks").param("limit", "50"))
                 .andExpect(status().isOk());
 
-        verify(spotifyService).getTopTracks(1);
-        verify(spotifyService).getTopTracks(50);
+        verify(spotifyService).getTopTracks(1, "medium_term");
+        verify(spotifyService).getTopTracks(50, "medium_term");
     }
 }

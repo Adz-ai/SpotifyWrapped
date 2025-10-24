@@ -1,13 +1,22 @@
 package org.adarssh.controller;
 
+import org.adarssh.config.CorrelationIdFilter;
+import org.adarssh.config.RateLimitingFilter;
+import org.adarssh.config.TestSecurityConfig;
+import org.adarssh.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
@@ -16,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(HomeController.class)
+@WebMvcTest(value = HomeController.class, excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
+))
+@Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
 class HomeControllerTest {
 
     @Autowired
@@ -85,7 +98,7 @@ class HomeControllerTest {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("display_name", null);
         OAuth2User oauth2User = new DefaultOAuth2User(
-                null,
+                List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes,
                 "display_name"
         );
@@ -95,15 +108,16 @@ class HomeControllerTest {
                         .with(oauth2Login().oauth2User(oauth2User)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(true))
-                .andExpect(jsonPath("$.user").isEmpty());
+                .andExpect(jsonPath("$.user").value(null));
     }
 
     @Test
     void homeWhenAuthenticatedWithoutDisplayNameReturnsNullUser() throws Exception {
         // given
         Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", "test-user-id");
         OAuth2User oauth2User = new DefaultOAuth2User(
-                null,
+                List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes,
                 "id"
         );
@@ -113,7 +127,7 @@ class HomeControllerTest {
                         .with(oauth2Login().oauth2User(oauth2User)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(true))
-                .andExpect(jsonPath("$.user").isEmpty());
+                .andExpect(jsonPath("$.user").value(null));
     }
 
     @Test

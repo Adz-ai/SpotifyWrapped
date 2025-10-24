@@ -78,7 +78,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<TrackDto> result = spotifyService.getTopTracks(limit);
+        UserTopItemsResponse<TrackDto> result = spotifyService.getTopTracks(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -109,7 +109,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<TrackDto> result = spotifyService.getTopTracks(null);
+        UserTopItemsResponse<TrackDto> result = spotifyService.getTopTracks(null, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -128,7 +128,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(null);
 
         // when/then
-        assertThatThrownBy(() -> spotifyService.getTopTracks(5))
+        assertThatThrownBy(() -> spotifyService.getTopTracks(5, "medium_term"))
                 .isInstanceOf(SpotifyApiException.class)
                 .hasMessageContaining("Failed to retrieve top tracks");
     }
@@ -143,7 +143,7 @@ class SpotifyServiceTest {
         when(requestHeadersSpec.retrieve()).thenThrow(new RuntimeException("API Error"));
 
         // when/then
-        assertThatThrownBy(() -> spotifyService.getTopTracks(5))
+        assertThatThrownBy(() -> spotifyService.getTopTracks(5, "medium_term"))
                 .isInstanceOf(SpotifyApiException.class)
                 .hasMessageContaining("Failed to fetch top tracks from Spotify API");
     }
@@ -168,7 +168,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<ArtistDto> result = spotifyService.getTopArtists(limit);
+        UserTopItemsResponse<ArtistDto> result = spotifyService.getTopArtists(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -190,7 +190,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(null);
 
         // when/then
-        assertThatThrownBy(() -> spotifyService.getTopArtists(10))
+        assertThatThrownBy(() -> spotifyService.getTopArtists(10, "medium_term"))
                 .isInstanceOf(SpotifyApiException.class)
                 .hasMessageContaining("Failed to retrieve top artists");
     }
@@ -205,7 +205,7 @@ class SpotifyServiceTest {
         when(requestHeadersSpec.retrieve()).thenThrow(new RuntimeException("API Error"));
 
         // when/then
-        assertThatThrownBy(() -> spotifyService.getTopArtists(10))
+        assertThatThrownBy(() -> spotifyService.getTopArtists(10, "medium_term"))
                 .isInstanceOf(SpotifyApiException.class)
                 .hasMessageContaining("Failed to fetch top artists from Spotify API");
     }
@@ -239,7 +239,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<AlbumDto> result = spotifyService.getTopAlbums(limit);
+        UserTopItemsResponse<AlbumDto> result = spotifyService.getTopAlbums(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -276,7 +276,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<AlbumDto> result = spotifyService.getTopAlbums(limit);
+        UserTopItemsResponse<AlbumDto> result = spotifyService.getTopAlbums(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -307,7 +307,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<String> result = spotifyService.getTopGenres(limit);
+        UserTopItemsResponse<String> result = spotifyService.getTopGenres(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -339,7 +339,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<String> result = spotifyService.getTopGenres(limit);
+        UserTopItemsResponse<String> result = spotifyService.getTopGenres(limit, "medium_term");
 
         // then
         assertThat(result).isNotNull();
@@ -367,7 +367,7 @@ class SpotifyServiceTest {
         when(responseSpec.body(any(ParameterizedTypeReference.class))).thenReturn(mockResponse);
 
         // when
-        UserTopItemsResponse<String> result = spotifyService.getTopGenres(null);
+        UserTopItemsResponse<String> result = spotifyService.getTopGenres(null, "medium_term");
 
         // then
         assertThat(result).isNotNull();

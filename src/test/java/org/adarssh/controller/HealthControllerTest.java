@@ -1,8 +1,15 @@
 package org.adarssh.controller;
 
+import org.adarssh.config.CorrelationIdFilter;
+import org.adarssh.config.RateLimitingFilter;
+import org.adarssh.config.TestSecurityConfig;
+import org.adarssh.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,7 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(HealthController.class)
+@WebMvcTest(value = HealthController.class, excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = {RateLimitingFilter.class, CorrelationIdFilter.class}
+))
+@Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
 class HealthControllerTest {
 
     @Autowired
