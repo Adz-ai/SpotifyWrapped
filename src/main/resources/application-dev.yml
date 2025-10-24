@@ -1,0 +1,61 @@
+# Development Environment Configuration
+spring:
+  jackson:
+    serialization:
+      indent-output: true  # Pretty print JSON for readability
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=60s  # Shorter cache for development
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always  # Include stacktrace in development
+
+logging:
+  level:
+    org.adarssh: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.cache: TRACE
+    io.github.resilience4j: DEBUG
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%5p) %clr([%X{correlationId:-NO-CORRELATION-ID}]){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
+# Actuator - expose all endpoints in dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Expose all actuator endpoints
+  endpoint:
+    health:
+      show-details: always  # Always show health details
+  metrics:
+    export:
+      simple:
+        enabled: true
+
+# OpenAPI/Swagger - fully enabled in dev
+springdoc:
+  swagger-ui:
+    enabled: true
+    try-it-out-enabled: true  # Enable "Try it out" button
+  api-docs:
+    enabled: true
+
+# Resilience4j - faster retry in dev
+resilience4j:
+  retry:
+    instances:
+      spotifyApi:
+        max-attempts: 2
+        wait-duration: 100ms
+  circuitbreaker:
+    instances:
+      spotifyApi:
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 5s

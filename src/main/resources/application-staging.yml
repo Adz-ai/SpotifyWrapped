@@ -1,0 +1,56 @@
+# Staging Environment Configuration
+spring:
+  jackson:
+    serialization:
+      indent-output: false  # Compact JSON for performance
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=300,expireAfterWrite=180s  # Moderate cache
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: on-param
+    include-stacktrace: on-param  # Conditional stacktrace
+
+logging:
+  level:
+    org.adarssh: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.cache: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{correlationId:-NO-CORRELATION-ID}] %5p [%t] %logger{40} : %m%n"
+
+# Actuator - limited endpoints in staging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# OpenAPI/Swagger - enabled but restricted
+springdoc:
+  swagger-ui:
+    enabled: true
+    try-it-out-enabled: false  # Disable "Try it out" for safety
+  api-docs:
+    enabled: true
+
+# Resilience4j - production-like settings
+resilience4j:
+  retry:
+    instances:
+      spotifyApi:
+        max-attempts: 3
+        wait-duration: 500ms
+  circuitbreaker:
+    instances:
+      spotifyApi:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s

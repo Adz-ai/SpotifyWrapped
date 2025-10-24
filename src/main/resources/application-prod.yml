@@ -1,0 +1,76 @@
+# Production Environment Configuration
+spring:
+  jackson:
+    serialization:
+      indent-output: false  # Compact JSON for performance
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=600s  # Larger, longer cache
+
+server:
+  port: 8080
+  error:
+    include-message: never  # Don't expose internal error messages
+    include-binding-errors: never
+    include-stacktrace: never  # Never show stacktrace in production
+  shutdown: graceful  # Graceful shutdown
+  compression:
+    enabled: true
+
+logging:
+  level:
+    root: WARN
+    org.adarssh: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{correlationId:-NO-CORRELATION-ID}] %5p [%t] %logger : %m%n"
+
+# Actuator - minimal exposure in production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus  # Only essential endpoints
+  endpoint:
+    health:
+      show-details: never  # Never show health details publicly
+      probes:
+        enabled: true  # Enable liveness/readiness probes for k8s
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# OpenAPI/Swagger - disabled in production
+springdoc:
+  swagger-ui:
+    enabled: false  # Disable Swagger UI in production
+  api-docs:
+    enabled: false  # Disable API docs in production
+
+# Resilience4j - production settings
+resilience4j:
+  retry:
+    instances:
+      spotifyApi:
+        max-attempts: 3
+        wait-duration: 1000ms  # Longer wait in production
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+  circuitbreaker:
+    instances:
+      spotifyApi:
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 30s  # Longer recovery time
+        minimum-number-of-calls: 10  # More calls before opening
+
+# Production-specific security headers
+server:
+  tomcat:
+    max-connections: 10000
+    threads:
+      max: 200
+      min-spare: 10

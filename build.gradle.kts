@@ -134,8 +134,21 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = "0.80".toBigDecimal() // 80% coverage target
+                minimum = "0.90".toBigDecimal() // 90% coverage target
+            }
+        }
+        rule {
+            element = "CLASS"
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.80".toBigDecimal() // 80% minimum per class
             }
         }
     }
+}
+
+// Add coverage verification to check task
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
 }

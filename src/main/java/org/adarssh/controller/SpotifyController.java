@@ -3,6 +3,7 @@ package org.adarssh.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -57,11 +58,54 @@ public class SpotifyController {
             description = "Successfully retrieved top tracks",
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = UserTopItemsResponse.class)
+                schema = @Schema(implementation = UserTopItemsResponse.class),
+                examples = @ExampleObject(
+                    name = "Top Tracks Example",
+                    value = """
+                        {
+                          "type": "tracks",
+                          "count": 3,
+                          "items": [
+                            {
+                              "id": "track123",
+                              "name": "Bohemian Rhapsody",
+                              "popularity": 95,
+                              "durationMs": 354320,
+                              "album": {
+                                "id": "album456",
+                                "name": "A Night at the Opera",
+                                "releaseDate": "1975-11-21"
+                              },
+                              "artists": [
+                                {"id": "artist789", "name": "Queen"}
+                              ]
+                            }
+                          ]
+                        }
+                        """
+                )
             )
         ),
-        @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid parameters")
+        @ApiResponse(
+            responseCode = "401",
+            description = "Not authenticated",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = """
+                    {"error": "Unauthorized", "message": "Authentication required"}
+                    """)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid parameters",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = """
+                    {"error": "Bad Request", "message": "Limit must be between 1 and 50"}
+                    """)
+            )
+        )
     })
     @GetMapping("/top/tracks")
     public ResponseEntity<UserTopItemsResponse<TrackDto>> getTopTracks(
