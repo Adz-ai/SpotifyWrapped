@@ -4,6 +4,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     checkstyle
     id("com.github.spotbugs") version "6.0.7"
+    jacoco
 }
 
 group = "org.adarssh"
@@ -50,7 +51,10 @@ dependencies {
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
 }
 
 tasks.withType<Test> {
@@ -94,5 +98,33 @@ tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
     reports.create("xml") {
         required.set(true)
         outputLocation.set(file("${project.buildDir}/reports/spotbugs/spotbugs.xml"))
+    }
+}
+
+// JaCoCo configuration
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // Generate report after tests run
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Tests are required to run before generating the report
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.80".toBigDecimal() // 80% coverage target
+            }
+        }
     }
 }

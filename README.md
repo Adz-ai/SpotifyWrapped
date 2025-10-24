@@ -179,6 +179,9 @@ frontend/src/
 ### Code Quality Tools
 - **Checkstyle** - Enforces Java coding standards (Google Java Style)
 - **SpotBugs** - Static analysis for finding bugs in Java code
+- **JaCoCo** - Code coverage analysis (target: 80%)
+- **JUnit 5** - Unit and integration testing framework
+- **Mockito** - Mocking framework for tests
 - **ESLint** - TypeScript/JavaScript linting with strict rules
 - **Prettier** - Code formatting for frontend
 
@@ -186,17 +189,36 @@ frontend/src/
 
 This project uses multiple code quality tools to maintain high standards:
 
+### Running Tests
+
+```bash
+# Backend - Run all tests
+./gradlew test
+
+# Backend - Run tests with coverage report
+./gradlew test jacocoTestReport
+
+# Backend - View coverage report
+open build/reports/jacoco/test/html/index.html
+
+# Frontend - Run tests (when added)
+cd frontend && npm test
+```
+
 ### Running Code Quality Checks
 
 ```bash
+# Backend - All quality checks
+./gradlew test checkstyleMain spotbugsMain jacocoTestReport
+
 # Backend - Checkstyle (coding standards)
 ./gradlew checkstyleMain
 
 # Backend - SpotBugs (bug detection)
 ./gradlew spotbugsMain
 
-# Backend - Run all checks
-./gradlew checkstyleMain spotbugsMain
+# Backend - Code coverage
+./gradlew jacocoTestReport
 
 # Frontend - Type checking
 cd frontend && npm run type-check
@@ -211,15 +233,70 @@ cd frontend && npm run format
 ### Reports
 
 After running the checks, reports are available at:
-- Checkstyle: `build/reports/checkstyle/main.html`
-- SpotBugs: `build/reports/spotbugs/spotbugs.html`
+- **Tests**: `build/reports/tests/test/index.html`
+- **Code Coverage**: `build/reports/jacoco/test/html/index.html`
+- **Checkstyle**: `build/reports/checkstyle/main.html`
+- **SpotBugs**: `build/reports/spotbugs/spotbugs.html`
 
 ### Configuration
 
+- **JaCoCo**: `build.gradle.kts` - Configured for 80% coverage target
+- **Tests**: `src/test/` - 98 comprehensive unit and integration tests
+  - Service tests with Mockito mocks
+  - Controller tests with MockMvc
+  - Integration tests with @SpringBootTest
+  - Exception handler tests
 - **Checkstyle**: `config/checkstyle/checkstyle.xml` - Based on Google Java Style with Spring Boot adjustments
 - **SpotBugs**: `config/spotbugs/excludeFilter.xml` - Excludes false positives for DTOs and Spring beans
 - **ESLint**: `frontend/.eslintrc.cjs` - Strict TypeScript rules
 - **Prettier**: `frontend/.prettierrc.json` - Code formatting rules
+
+## Testing
+
+The project includes a comprehensive test suite:
+
+### Test Structure
+
+```
+src/test/java/org/adarssh/
+├── config/
+│   └── OpenApiConfigTest.java          (15 tests)
+├── controller/
+│   ├── HealthControllerTest.java       (6 tests)
+│   ├── HomeControllerTest.java         (8 tests)
+│   └── SpotifyControllerTest.java      (24 tests)
+├── exception/
+│   └── GlobalExceptionHandlerTest.java (12 tests)
+├── integration/
+│   └── SpotifyApiIntegrationTest.java  (11 tests)
+└── service/
+    ├── OAuth2TokenServiceTest.java     (6 tests)
+    ├── SpotifyAuthServiceTest.java     (6 tests)
+    └── SpotifyServiceTest.java         (12 tests)
+```
+
+### Test Coverage
+
+- **Total Tests**: 98
+- **Coverage Target**: 80%
+- **Test Types**:
+  - Unit tests for services (Mockito)
+  - Controller tests (MockMvc)
+  - Integration tests (SpringBootTest)
+  - Exception handler tests
+
+### Running Tests
+
+```bash
+# Run all tests
+./gradlew test
+
+# Run tests with coverage
+./gradlew test jacocoTestReport
+
+# View coverage report
+open build/reports/jacoco/test/html/index.html
+```
 
 ## Important Notes
 

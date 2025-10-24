@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: spotify-wrapped-test
+
+  security:
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: test-client-id
+            client-secret: test-client-secret
+            scope: user-top-read
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          spotify:
+            authorization-uri: https://accounts.spotify.com/authorize
+            token-uri: https://accounts.spotify.com/api/token
+            user-info-uri: https://api.spotify.com/v1/me
+            user-name-attribute: id
+
+spotify:
+  api:
+    base-url: https://api.spotify.com/v1
+    auth-url: https://accounts.spotify.com/api/token
+    client-id: test-client-id
+    client-secret: test-client-secret
+    default-limit: 10
+
+logging:
+  level:
+    root: INFO
+    org.adarssh: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
