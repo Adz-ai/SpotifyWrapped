@@ -7,10 +7,15 @@ import org.adarssh.dto.SpotifyPagedResponse;
 import org.adarssh.dto.TrackDto;
 import org.adarssh.dto.UserTopItemsResponse;
 import org.adarssh.exception.SpotifyApiException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -45,8 +50,16 @@ public class SpotifyService {
     }
 
     /**
-     * Get user's top tracks
+     * Get user's top tracks.
+     * Results are cached for 5 minutes per user and limit combination.
+     * Implements retry (3 attempts) and circuit breaker patterns for resilience.
+     *
+     * @param limit the maximum number of tracks to return
+     * @return the user's top tracks
      */
+    @Cacheable(value = "topTracks", key = "#root.target.getCurrentUsername() + '-' + #limit")
+    @Retry(name = "spotifyApi", fallbackMethod = "getTopTracksFallback")
+    @CircuitBreaker(name = "spotifyApi", fallbackMethod = "getTopTracksFallback")
     public UserTopItemsResponse<TrackDto> getTopTracks(Integer limit) {
         log.debug("Fetching top {} tracks", limit);
         var accessToken = oauth2TokenService.getUserAccessToken();
@@ -74,8 +87,16 @@ public class SpotifyService {
     }
 
     /**
-     * Get user's top artists
+     * Get user's top artists.
+     * Results are cached for 5 minutes per user and limit combination.
+     * Implements retry (3 attempts) and circuit breaker patterns for resilience.
+     *
+     * @param limit the maximum number of artists to return
+     * @return the user's top artists
      */
+    @Cacheable(value = "topArtists", key = "#root.target.getCurrentUsername() + '-' + #limit")
+    @Retry(name = "spotifyApi", fallbackMethod = "getTopArtistsFallback")
+    @CircuitBreaker(name = "spotifyApi", fallbackMethod = "getTopArtistsFallback")
     public UserTopItemsResponse<ArtistDto> getTopArtists(Integer limit) {
         log.debug("Fetching top {} artists", limit);
         var accessToken = oauth2TokenService.getUserAccessToken();
@@ -134,5 +155,39 @@ public class SpotifyService {
                 .collect(Collectors.toList());
 
         return new UserTopItemsResponse<>("genres", genres.size(), genres);
+    }
+
+    /**
+     * Get the current authenticated username for cache key generation.
+     *
+     * @return the current username or "anonymous" if not authenticated
+     */
+    public String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : "anonymous";
+    }
+
+    /**
+     * Fallback method for getTopTracks when Spotify API is unavailable.
+     *
+     * @param limit the limit parameter
+     * @param ex the exception that triggered the fallback
+     * @return an empty response with error information
+     */
+    private UserTopItemsResponse<TrackDto> getTopTracksFallback(Integer limit, Exception ex) {
+        log.error("Fallback triggered for getTopTracks. Returning empty response.", ex);
+        return new UserTopItemsResponse<>("tracks", 0, java.util.Collections.emptyList());
+    }
+
+    /**
+     * Fallback method for getTopArtists when Spotify API is unavailable.
+     *
+     * @param limit the limit parameter
+     * @param ex the exception that triggered the fallback
+     * @return an empty response with error information
+     */
+    private UserTopItemsResponse<ArtistDto> getTopArtistsFallback(Integer limit, Exception ex) {
+        log.error("Fallback triggered for getTopArtists. Returning empty response.", ex);
+        return new UserTopItemsResponse<>("artists", 0, java.util.Collections.emptyList());
     }
 }

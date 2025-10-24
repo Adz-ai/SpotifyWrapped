@@ -2,6 +2,7 @@ package org.adarssh;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * Main Spring Boot application class for Spotify Wrapped API
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * All endpoints accept an optional 'limit' query parameter (default: 5)
  */
 @SpringBootApplication
+@EnableCaching
 public class SpotifyWrappedApplication {
 
     public static void main(String[] args) {

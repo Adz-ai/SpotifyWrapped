@@ -5,6 +5,13 @@ spring:
     serialization:
       indent-output: true
     default-property-inclusion: non_null
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=300s
+    cache-names:
+      - topTracks
+      - topArtists
   security:
     oauth2:
       client:
@@ -30,6 +37,15 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/xml
+      - text/html
+      - text/xml
+      - text/plain
+    min-response-size: 1024
 
 spotify:
   api:
@@ -84,3 +100,28 @@ springdoc:
     tags-sorter: alpha
     display-request-duration: true
     doc-expansion: none
+
+# Resilience4j Configuration
+resilience4j:
+  retry:
+    instances:
+      spotifyApi:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - java.io.IOException
+  circuitbreaker:
+    instances:
+      spotifyApi:
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 10s
+        automatic-transition-from-open-to-half-open-enabled: true

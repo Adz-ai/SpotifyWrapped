@@ -42,6 +42,14 @@ dependencies {
     // Monitoring and Health Checks
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
+    // Caching
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
+    // Resilience (Retry, Circuit Breaker)
+    implementation("io.github.resilience4j:resilience4j-spring-boot3:2.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+
     // Lombok (optional but recommended for reducing boilerplate)
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
