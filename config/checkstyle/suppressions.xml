@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Suppress checks for generated code -->
+    <suppress checks=".*" files=".*[\\/]target[\\/]generated-sources[\\/].*"/>
+    <suppress checks=".*" files=".*[\\/]build[\\/]generated[\\/].*"/>
+
+    <!-- Suppress checks for test resources -->
+    <suppress checks=".*" files=".*[\\/]src[\\/]test[\\/]resources[\\/].*"/>
+
+    <!-- Suppress line length for application.yml -->
+    <suppress checks="LineLength" files="application\.yml"/>
+    <suppress checks="LineLength" files="application\.properties"/>
+</suppressions>

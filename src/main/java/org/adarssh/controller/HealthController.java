@@ -19,5 +19,5 @@ public class HealthController {
         return ResponseEntity.ok(new HealthResponse("UP", Instant.now()));
     }
 
-    public record HealthResponse(String status, Instant timestamp) {}
+    public record HealthResponse(String status, Instant timestamp) { }
 }

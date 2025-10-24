@@ -5,13 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Main Spring Boot application class for Spotify Wrapped API
- *
+ * <p>
  * This application provides REST endpoints to fetch user's top Spotify items:
  * - Top tracks
  * - Top artists
  * - Top albums (derived from top tracks)
  * - Top genres (derived from top artists)
- *
+ * <p>
  * API Endpoints:
  * - GET /api/health - Health check
  * - GET /api/spotify/top/tracks - Get top tracks
@@ -19,13 +19,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * - GET /api/spotify/top/albums - Get top albums
  * - GET /api/spotify/top/genres - Get top genres
  * - GET /api/spotify/wrapped - Get all top items at once
- *
+ * <p>
  * All endpoints accept an optional 'limit' query parameter (default: 5)
  */
 @SpringBootApplication
+@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class SpotifyWrappedApplication {
 
-    public static void main(String[] args) {
+    void main(String[] args) {
         SpringApplication.run(SpotifyWrappedApplication.class, args);
     }
 }

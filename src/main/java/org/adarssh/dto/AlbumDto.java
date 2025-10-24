@@ -17,4 +17,4 @@ public record AlbumDto(
         List<ArtistDto> artists,
         List<ImageDto> images,
         @JsonProperty("external_urls") ExternalUrls externalUrls
-) {}
+) { }

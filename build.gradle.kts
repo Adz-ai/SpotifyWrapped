@@ -2,6 +2,8 @@ plugins {
     java
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
+    checkstyle
+    id("com.github.spotbugs") version "6.0.7"
 }
 
 group = "org.adarssh"
@@ -52,4 +54,39 @@ tasks.withType<Test> {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("--enable-preview")
+}
+
+// Checkstyle configuration
+checkstyle {
+    toolVersion = "10.12.7"
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = false
+    maxWarnings = 0
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+// SpotBugs configuration
+spotbugs {
+    toolVersion.set("4.8.3")
+    effort.set(com.github.spotbugs.snom.Effort.MAX)
+    reportLevel.set(com.github.spotbugs.snom.Confidence.MEDIUM)
+    ignoreFailures.set(false)
+    excludeFilter.set(file("${project.rootDir}/config/spotbugs/excludeFilter.xml"))
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
+    reports.create("html") {
+        required.set(true)
+        outputLocation.set(file("${project.buildDir}/reports/spotbugs/spotbugs.html"))
+    }
+    reports.create("xml") {
+        required.set(true)
+        outputLocation.set(file("${project.buildDir}/reports/spotbugs/spotbugs.xml"))
+    }
 }

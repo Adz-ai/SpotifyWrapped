@@ -10,4 +10,4 @@ public record ImageDto(
         String url,
         Integer height,
         Integer width
-) {}
+) { }

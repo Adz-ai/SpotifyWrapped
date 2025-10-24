@@ -152,6 +152,51 @@ frontend/src/
 - Axios for HTTP
 - ESLint + Prettier
 
+### Code Quality Tools
+- **Checkstyle** - Enforces Java coding standards (Google Java Style)
+- **SpotBugs** - Static analysis for finding bugs in Java code
+- **ESLint** - TypeScript/JavaScript linting with strict rules
+- **Prettier** - Code formatting for frontend
+
+## Code Quality
+
+This project uses multiple code quality tools to maintain high standards:
+
+### Running Code Quality Checks
+
+```bash
+# Backend - Checkstyle (coding standards)
+./gradlew checkstyleMain
+
+# Backend - SpotBugs (bug detection)
+./gradlew spotbugsMain
+
+# Backend - Run all checks
+./gradlew checkstyleMain spotbugsMain
+
+# Frontend - Type checking
+cd frontend && npm run type-check
+
+# Frontend - Linting
+cd frontend && npm run lint
+
+# Frontend - Formatting
+cd frontend && npm run format
+```
+
+### Reports
+
+After running the checks, reports are available at:
+- Checkstyle: `build/reports/checkstyle/main.html`
+- SpotBugs: `build/reports/spotbugs/spotbugs.html`
+
+### Configuration
+
+- **Checkstyle**: `config/checkstyle/checkstyle.xml` - Based on Google Java Style with Spring Boot adjustments
+- **SpotBugs**: `config/spotbugs/excludeFilter.xml` - Excludes false positives for DTOs and Spring beans
+- **ESLint**: `frontend/.eslintrc.cjs` - Strict TypeScript rules
+- **Prettier**: `frontend/.prettierrc.json` - Code formatting rules
+
 ## Important Notes
 
 ### Using 127.0.0.1 Instead of localhost

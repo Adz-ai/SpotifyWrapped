@@ -17,4 +17,4 @@ public record TrackDto(
         Integer popularity,
         @JsonProperty("duration_ms") Integer durationMs,
         @JsonProperty("external_urls") ExternalUrls externalUrls
-) {}
+) { }

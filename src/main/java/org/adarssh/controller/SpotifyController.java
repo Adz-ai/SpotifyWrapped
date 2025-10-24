@@ -1,11 +1,17 @@
 package org.adarssh.controller;
 
-import org.adarssh.dto.*;
+import org.adarssh.dto.AlbumDto;
+import org.adarssh.dto.ArtistDto;
+import org.adarssh.dto.TrackDto;
+import org.adarssh.dto.UserTopItemsResponse;
 import org.adarssh.service.SpotifyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for Spotify API endpoints
@@ -95,5 +101,5 @@ public class SpotifyController {
             UserTopItemsResponse<ArtistDto> topArtists,
             UserTopItemsResponse<AlbumDto> topAlbums,
             UserTopItemsResponse<String> topGenres
-    ) {}
+    ) { }
 }

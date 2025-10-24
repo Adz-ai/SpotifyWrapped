@@ -16,4 +16,4 @@ public record ArtistDto(
         Integer popularity,
         @JsonProperty("external_urls") ExternalUrls externalUrls,
         List<ImageDto> images
-) {}
+) { }

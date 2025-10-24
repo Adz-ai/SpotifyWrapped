@@ -9,4 +9,4 @@ public record UserTopItemsResponse<T>(
         String type,
         Integer count,
         List<T> items
-) {}
+) { }

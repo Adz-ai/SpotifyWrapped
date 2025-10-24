@@ -15,4 +15,4 @@ public record SpotifyProperties(
         @NotBlank String clientId,
         @NotBlank String clientSecret,
         Integer defaultLimit
-) {}
+) { }

@@ -15,4 +15,4 @@ public record SpotifyPagedResponse<T>(
         Integer offset,
         String next,
         String previous
-) {}
+) { }

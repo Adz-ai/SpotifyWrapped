@@ -79,5 +79,5 @@ public class GlobalExceptionHandler {
             String message,
             String path,
             Instant timestamp
-    ) {}
+    ) { }
 }

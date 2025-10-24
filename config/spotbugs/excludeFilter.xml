@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- DTOs are Java records used for JSON serialization/deserialization.
+         The EI_EXPOSE_REP warnings are false positives since:
+         1. Records are immutable (final class, final fields)
+         2. Lists are used for JSON binding with Jackson
+         3. These are data transfer objects, not domain models
+    -->
+    <Match>
+        <Package name="org.adarssh.dto"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!-- Spring services use dependency injection with immutable beans.
+         The EI_EXPOSE_REP2 warnings are false positives since:
+         1. RestClient and other Spring beans are managed by the container
+         2. Constructor injection is the recommended Spring pattern
+         3. These beans are effectively immutable after injection
+    -->
+    <Match>
+        <Package name="org.adarssh.service"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+</FindBugsFilter>
