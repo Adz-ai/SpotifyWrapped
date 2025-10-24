@@ -52,17 +52,18 @@ public class SpotifyService {
 
     /**
      * Get user's top tracks.
-     * Results are cached for 5 minutes per user and limit combination.
+     * Results are cached for 5 minutes per user, limit, and time range combination.
      * Implements retry (3 attempts) and circuit breaker patterns for resilience.
      *
      * @param limit the maximum number of tracks to return
+     * @param timeRange the time range (short_term, medium_term, long_term)
      * @return the user's top tracks
      */
-    @Cacheable(value = "topTracks", key = "#root.target.getCurrentUsername() + '-' + #limit")
+    @Cacheable(value = "topTracks", key = "#root.target.getCurrentUsername() + '-' + #limit + '-' + #timeRange")
     @Retry(name = "spotifyApi", fallbackMethod = "getTopTracksFallback")
     @CircuitBreaker(name = "spotifyApi", fallbackMethod = "getTopTracksFallback")
-    public UserTopItemsResponse<TrackDto> getTopTracks(Integer limit) {
-        log.debug("Fetching top {} tracks", limit);
+    public UserTopItemsResponse<TrackDto> getTopTracks(Integer limit, String timeRange) {
+        log.debug("Fetching top {} tracks for time range: {}", limit, timeRange);
         var accessToken = oauth2TokenService.getUserAccessToken();
 
         try {
@@ -70,6 +71,7 @@ public class SpotifyService {
                     .uri(uriBuilder -> uriBuilder
                             .path("/me/top/tracks")
                             .queryParam("limit", limit != null ? limit : properties.defaultLimit())
+                            .queryParam("time_range", timeRange != null ? timeRange : "medium_term")
                             .build())
                     .header("Authorization", "Bearer " + accessToken)
                     .retrieve()
@@ -89,17 +91,18 @@ public class SpotifyService {
 
     /**
      * Get user's top artists.
-     * Results are cached for 5 minutes per user and limit combination.
+     * Results are cached for 5 minutes per user, limit, and time range combination.
      * Implements retry (3 attempts) and circuit breaker patterns for resilience.
      *
      * @param limit the maximum number of artists to return
+     * @param timeRange the time range (short_term, medium_term, long_term)
      * @return the user's top artists
      */
-    @Cacheable(value = "topArtists", key = "#root.target.getCurrentUsername() + '-' + #limit")
+    @Cacheable(value = "topArtists", key = "#root.target.getCurrentUsername() + '-' + #limit + '-' + #timeRange")
     @Retry(name = "spotifyApi", fallbackMethod = "getTopArtistsFallback")
     @CircuitBreaker(name = "spotifyApi", fallbackMethod = "getTopArtistsFallback")
-    public UserTopItemsResponse<ArtistDto> getTopArtists(Integer limit) {
-        log.debug("Fetching top {} artists", limit);
+    public UserTopItemsResponse<ArtistDto> getTopArtists(Integer limit, String timeRange) {
+        log.debug("Fetching top {} artists for time range: {}", limit, timeRange);
         var accessToken = oauth2TokenService.getUserAccessToken();
 
         try {
@@ -107,6 +110,7 @@ public class SpotifyService {
                     .uri(uriBuilder -> uriBuilder
                             .path("/me/top/artists")
                             .queryParam("limit", limit != null ? limit : properties.defaultLimit())
+                            .queryParam("time_range", timeRange != null ? timeRange : "medium_term")
                             .build())
                     .header("Authorization", "Bearer " + accessToken)
                     .retrieve()
@@ -129,14 +133,15 @@ public class SpotifyService {
      * Uses AOP proxy to ensure caching works on internal call to getTopTracks().
      *
      * @param limit the maximum number of albums to return
+     * @param timeRange the time range (short_term, medium_term, long_term)
      * @return the user's top albums derived from top tracks
      */
-    public UserTopItemsResponse<AlbumDto> getTopAlbums(Integer limit) {
-        log.debug("Fetching top albums from top tracks");
+    public UserTopItemsResponse<AlbumDto> getTopAlbums(Integer limit, String timeRange) {
+        log.debug("Fetching top albums from top tracks for time range: {}", timeRange);
         Integer maxSize = limit != null ? limit : properties.defaultLimit();
         // Get the Spring AOP proxy to ensure @Cacheable, @Retry, @CircuitBreaker work
         SpotifyService proxy = (SpotifyService) AopContext.currentProxy();
-        var topTracks = proxy.getTopTracks(maxSize);
+        var topTracks = proxy.getTopTracks(maxSize, timeRange);
 
         var albums = topTracks.items().stream()
                 .map(TrackDto::album)
@@ -152,14 +157,15 @@ public class SpotifyService {
      * Uses AOP proxy to ensure caching works on internal call to getTopArtists().
      *
      * @param limit the maximum number of genres to return
+     * @param timeRange the time range (short_term, medium_term, long_term)
      * @return the user's top genres derived from top artists
      */
-    public UserTopItemsResponse<String> getTopGenres(Integer limit) {
-        log.debug("Fetching top genres from top artists");
+    public UserTopItemsResponse<String> getTopGenres(Integer limit, String timeRange) {
+        log.debug("Fetching top genres from top artists for time range: {}", timeRange);
         Integer maxSize = limit != null ? limit : properties.defaultLimit();
         // Get the Spring AOP proxy to ensure @Cacheable, @Retry, @CircuitBreaker work
         SpotifyService proxy = (SpotifyService) AopContext.currentProxy();
-        var topArtists = proxy.getTopArtists(maxSize);
+        var topArtists = proxy.getTopArtists(maxSize, timeRange);
 
         var genres = topArtists.items().stream()
                 .flatMap(artist -> artist.genres().stream())
@@ -184,11 +190,12 @@ public class SpotifyService {
      * Fallback method for getTopTracks when Spotify API is unavailable.
      *
      * @param limit the limit parameter
+     * @param timeRange the time range parameter
      * @param ex the exception that triggered the fallback
      * @return an empty response with error information
      */
-    private UserTopItemsResponse<TrackDto> getTopTracksFallback(Integer limit, Exception ex) {
-        log.error("Fallback triggered for getTopTracks. Returning empty response.", ex);
+    private UserTopItemsResponse<TrackDto> getTopTracksFallback(Integer limit, String timeRange, Exception ex) {
+        log.error("Fallback triggered for getTopTracks (timeRange: {}). Returning empty response.", timeRange, ex);
         return new UserTopItemsResponse<>("tracks", 0, java.util.Collections.emptyList());
     }
 
@@ -196,11 +203,12 @@ public class SpotifyService {
      * Fallback method for getTopArtists when Spotify API is unavailable.
      *
      * @param limit the limit parameter
+     * @param timeRange the time range parameter
      * @param ex the exception that triggered the fallback
      * @return an empty response with error information
      */
-    private UserTopItemsResponse<ArtistDto> getTopArtistsFallback(Integer limit, Exception ex) {
-        log.error("Fallback triggered for getTopArtists. Returning empty response.", ex);
+    private UserTopItemsResponse<ArtistDto> getTopArtistsFallback(Integer limit, String timeRange, Exception ex) {
+        log.error("Fallback triggered for getTopArtists (timeRange: {}). Returning empty response.", timeRange, ex);
         return new UserTopItemsResponse<>("artists", 0, java.util.Collections.emptyList());
     }
 }

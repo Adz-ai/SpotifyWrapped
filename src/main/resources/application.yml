@@ -60,7 +60,7 @@ logging:
     org.adarssh: DEBUG
     org.springframework.web: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{correlationId:-NO-CORRELATION-ID}] - %msg%n"
 
 # Actuator Configuration
 management:

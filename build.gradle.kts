@@ -50,6 +50,9 @@ dependencies {
     implementation("io.github.resilience4j:resilience4j-spring-boot3:2.2.0")
     implementation("org.springframework.boot:spring-boot-starter-aop")
 
+    // Rate Limiting
+    implementation("com.bucket4j:bucket4j-core:8.10.1")
+
     // Lombok (optional but recommended for reducing boilerplate)
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

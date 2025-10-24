@@ -44,6 +44,7 @@ public class SpotifyController {
      * Get user's top tracks.
      *
      * @param limit Number of tracks to return (1-50, default: 5)
+     * @param timeRange Time range for calculation (short_term, medium_term, long_term)
      * @return User's top tracks
      */
     @Operation(
@@ -60,7 +61,7 @@ public class SpotifyController {
             )
         ),
         @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid limit parameter")
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
     @GetMapping("/top/tracks")
     public ResponseEntity<UserTopItemsResponse<TrackDto>> getTopTracks(
@@ -68,9 +69,14 @@ public class SpotifyController {
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit must be at most 50")
-            Integer limit) {
-        log.info("GET /api/spotify/top/tracks - limit: {}", limit);
-        var response = spotifyService.getTopTracks(limit);
+            Integer limit,
+            @Parameter(
+                    description = "Time range: short_term (4 weeks), medium_term (6 months), long_term (all time)",
+                    example = "medium_term")
+            @RequestParam(required = false, defaultValue = "medium_term")
+            String timeRange) {
+        log.info("GET /api/spotify/top/tracks - limit: {}, timeRange: {}", limit, timeRange);
+        var response = spotifyService.getTopTracks(limit, timeRange);
         return ResponseEntity.ok(response);
     }
 
@@ -78,6 +84,7 @@ public class SpotifyController {
      * Get user's top artists.
      *
      * @param limit Number of artists to return (1-50, default: 5)
+     * @param timeRange Time range for calculation (short_term, medium_term, long_term)
      * @return User's top artists
      */
     @Operation(
@@ -94,7 +101,7 @@ public class SpotifyController {
             )
         ),
         @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid limit parameter")
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
     @GetMapping("/top/artists")
     public ResponseEntity<UserTopItemsResponse<ArtistDto>> getTopArtists(
@@ -102,9 +109,14 @@ public class SpotifyController {
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit must be at most 50")
-            Integer limit) {
-        log.info("GET /api/spotify/top/artists - limit: {}", limit);
-        var response = spotifyService.getTopArtists(limit);
+            Integer limit,
+            @Parameter(
+                    description = "Time range: short_term (4 weeks), medium_term (6 months), long_term (all time)",
+                    example = "medium_term")
+            @RequestParam(required = false, defaultValue = "medium_term")
+            String timeRange) {
+        log.info("GET /api/spotify/top/artists - limit: {}, timeRange: {}", limit, timeRange);
+        var response = spotifyService.getTopArtists(limit, timeRange);
         return ResponseEntity.ok(response);
     }
 
@@ -112,6 +124,7 @@ public class SpotifyController {
      * Get user's top albums.
      *
      * @param limit Number of albums to return (1-50, default: 5)
+     * @param timeRange Time range for calculation (short_term, medium_term, long_term)
      * @return User's top albums
      */
     @Operation(
@@ -128,7 +141,7 @@ public class SpotifyController {
             )
         ),
         @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid limit parameter")
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
     @GetMapping("/top/albums")
     public ResponseEntity<UserTopItemsResponse<AlbumDto>> getTopAlbums(
@@ -136,9 +149,14 @@ public class SpotifyController {
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit must be at most 50")
-            Integer limit) {
-        log.info("GET /api/spotify/top/albums - limit: {}", limit);
-        var response = spotifyService.getTopAlbums(limit);
+            Integer limit,
+            @Parameter(
+                    description = "Time range: short_term (4 weeks), medium_term (6 months), long_term (all time)",
+                    example = "medium_term")
+            @RequestParam(required = false, defaultValue = "medium_term")
+            String timeRange) {
+        log.info("GET /api/spotify/top/albums - limit: {}, timeRange: {}", limit, timeRange);
+        var response = spotifyService.getTopAlbums(limit, timeRange);
         return ResponseEntity.ok(response);
     }
 
@@ -146,6 +164,7 @@ public class SpotifyController {
      * Get user's top genres.
      *
      * @param limit Number of genres to return (1-50, default: 5)
+     * @param timeRange Time range for calculation (short_term, medium_term, long_term)
      * @return User's top genres
      */
     @Operation(
@@ -162,7 +181,7 @@ public class SpotifyController {
             )
         ),
         @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid limit parameter")
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
     @GetMapping("/top/genres")
     public ResponseEntity<UserTopItemsResponse<String>> getTopGenres(
@@ -170,9 +189,14 @@ public class SpotifyController {
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit must be at most 50")
-            Integer limit) {
-        log.info("GET /api/spotify/top/genres - limit: {}", limit);
-        var response = spotifyService.getTopGenres(limit);
+            Integer limit,
+            @Parameter(
+                    description = "Time range: short_term (4 weeks), medium_term (6 months), long_term (all time)",
+                    example = "medium_term")
+            @RequestParam(required = false, defaultValue = "medium_term")
+            String timeRange) {
+        log.info("GET /api/spotify/top/genres - limit: {}, timeRange: {}", limit, timeRange);
+        var response = spotifyService.getTopGenres(limit, timeRange);
         return ResponseEntity.ok(response);
     }
 
@@ -180,6 +204,7 @@ public class SpotifyController {
      * Get all user's top items at once (wrapped summary).
      *
      * @param limit Number of items per category to return (1-50, default: 5)
+     * @param timeRange Time range for calculation (short_term, medium_term, long_term)
      * @return Complete wrapped data with top tracks, artists, albums, and genres
      */
     @Operation(
@@ -197,7 +222,7 @@ public class SpotifyController {
             )
         ),
         @ApiResponse(responseCode = "401", description = "Not authenticated"),
-        @ApiResponse(responseCode = "400", description = "Invalid limit parameter")
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
     @GetMapping("/wrapped")
     public ResponseEntity<SpotifyWrappedResponse> getSpotifyWrapped(
@@ -205,13 +230,18 @@ public class SpotifyController {
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit must be at most 50")
-            Integer limit) {
-        log.info("GET /api/spotify/wrapped - limit: {}", limit);
+            Integer limit,
+            @Parameter(
+                    description = "Time range: short_term (4 weeks), medium_term (6 months), long_term (all time)",
+                    example = "medium_term")
+            @RequestParam(required = false, defaultValue = "medium_term")
+            String timeRange) {
+        log.info("GET /api/spotify/wrapped - limit: {}, timeRange: {}", limit, timeRange);
 
-        var tracks = spotifyService.getTopTracks(limit);
-        var artists = spotifyService.getTopArtists(limit);
-        var albums = spotifyService.getTopAlbums(limit);
-        var genres = spotifyService.getTopGenres(limit);
+        var tracks = spotifyService.getTopTracks(limit, timeRange);
+        var artists = spotifyService.getTopArtists(limit, timeRange);
+        var albums = spotifyService.getTopAlbums(limit, timeRange);
+        var genres = spotifyService.getTopGenres(limit, timeRange);
 
         var wrapped = new SpotifyWrappedResponse(tracks, artists, albums, genres);
         return ResponseEntity.ok(wrapped);
