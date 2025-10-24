@@ -12,7 +12,8 @@ interface DashboardProps {
 
 export const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
   const [limit, setLimit] = useState(10);
-  const { data, isLoading, error } = useSpotifyData(limit);
+  const [timeRange, setTimeRange] = useState('medium_term');
+  const { data, isLoading, error } = useSpotifyData(limit, timeRange);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -57,8 +58,22 @@ export const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               <select
+                value={timeRange}
+                onChange={(e) => {
+                  setTimeRange(e.target.value);
+                }}
+                className="bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-spotify-green"
+              >
+                <option value="short_term">Last 4 Weeks</option>
+                <option value="medium_term">Last 6 Months</option>
+                <option value="long_term">All Time</option>
+              </select>
+
+              <select
                 value={limit}
-                onChange={(e) => setLimit(Number(e.target.value))}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                }}
                 className="bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-spotify-green"
               >
                 <option value={5}>Top 5</option>

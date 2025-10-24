@@ -64,10 +64,10 @@ class SpotifyApiClient {
   /**
    * Get user's complete Spotify Wrapped data
    */
-  async getWrapped(limit = 10): Promise<SpotifyWrappedResponse> {
+  async getWrapped(limit = 10, timeRange = 'medium_term'): Promise<SpotifyWrappedResponse> {
     try {
       const response = await this.client.get<SpotifyWrappedResponse>('/spotify/wrapped', {
-        params: { limit },
+        params: { limit, timeRange },
       });
       return response.data;
     } catch (error) {
@@ -78,12 +78,12 @@ class SpotifyApiClient {
   /**
    * Get user's top tracks
    */
-  async getTopTracks(limit = 10): Promise<UserTopItemsResponse<TrackDto>> {
+  async getTopTracks(limit = 10, timeRange = 'medium_term'): Promise<UserTopItemsResponse<TrackDto>> {
     try {
       const response = await this.client.get<UserTopItemsResponse<TrackDto>>(
         '/spotify/top/tracks',
         {
-          params: { limit },
+          params: { limit, timeRange },
         }
       );
       return response.data;
@@ -95,12 +95,12 @@ class SpotifyApiClient {
   /**
    * Get user's top artists
    */
-  async getTopArtists(limit = 10): Promise<UserTopItemsResponse<ArtistDto>> {
+  async getTopArtists(limit = 10, timeRange = 'medium_term'): Promise<UserTopItemsResponse<ArtistDto>> {
     try {
       const response = await this.client.get<UserTopItemsResponse<ArtistDto>>(
         '/spotify/top/artists',
         {
-          params: { limit },
+          params: { limit, timeRange },
         }
       );
       return response.data;
@@ -112,12 +112,12 @@ class SpotifyApiClient {
   /**
    * Get user's top albums
    */
-  async getTopAlbums(limit = 10): Promise<UserTopItemsResponse<AlbumDto>> {
+  async getTopAlbums(limit = 10, timeRange = 'medium_term'): Promise<UserTopItemsResponse<AlbumDto>> {
     try {
       const response = await this.client.get<UserTopItemsResponse<AlbumDto>>(
         '/spotify/top/albums',
         {
-          params: { limit },
+          params: { limit, timeRange },
         }
       );
       return response.data;
@@ -129,10 +129,10 @@ class SpotifyApiClient {
   /**
    * Get user's top genres
    */
-  async getTopGenres(limit = 10): Promise<UserTopItemsResponse<string>> {
+  async getTopGenres(limit = 10, timeRange = 'medium_term'): Promise<UserTopItemsResponse<string>> {
     try {
       const response = await this.client.get<UserTopItemsResponse<string>>('/spotify/top/genres', {
-        params: { limit },
+        params: { limit, timeRange },
       });
       return response.data;
     } catch (error) {
