@@ -307,6 +307,72 @@ src/test/java/org/adarssh/
 open build/reports/jacoco/test/html/index.html
 ```
 
+## CI/CD
+
+This project includes a comprehensive CI/CD pipeline using GitHub Actions.
+
+### Workflows
+
+#### Main CI Pipeline (`.github/workflows/ci.yml`)
+
+Runs on every push to `main` and all pull requests:
+
+**Backend Checks:**
+- Checkstyle (Google Java Style)
+- SpotBugs (static bug analysis)
+- JUnit tests (98 tests)
+- Full build verification
+- Uploads test reports, coverage, and quality reports as artifacts
+
+**Frontend Checks:**
+- ESLint (TypeScript strict mode)
+- TypeScript type checking
+- Production build verification
+- Uploads build artifacts
+
+**Status Check:**
+- Ensures all backend and frontend checks pass before merging
+
+#### Security Scanning (`.github/workflows/codeql.yml`)
+
+Runs on pushes, PRs, and weekly schedule:
+
+- CodeQL analysis for Java and JavaScript/TypeScript
+- Automated security vulnerability detection
+- Security advisories for known CVEs
+
+#### Dependency Updates (`.github/dependabot.yml`)
+
+Automated dependency management:
+
+- **Gradle dependencies**: Weekly updates for Java backend
+- **npm dependencies**: Weekly updates for React frontend
+- **GitHub Actions**: Weekly updates for workflow dependencies
+- Automatic PR creation with up to 5 open PRs per ecosystem
+
+### Viewing CI Results
+
+1. **In Pull Requests**: Status checks appear at the bottom of each PR
+2. **Actions Tab**: View all workflow runs in the Actions tab
+3. **Artifacts**: Download test reports and coverage from workflow run pages
+
+### Local Testing Before Push
+
+Run the same checks locally before pushing:
+
+```bash
+# Backend checks (same as CI)
+./gradlew checkstyleMain spotbugsMain test build
+
+# Frontend checks (same as CI)
+cd frontend
+npm run lint
+npm run type-check
+npm run build
+```
+
+All checks must pass for the CI pipeline to succeed.
+
 ## Performance & Resilience
 
 This application implements several production-ready patterns for optimal performance and reliability:
