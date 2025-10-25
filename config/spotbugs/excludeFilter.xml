@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
+    <!-- Exclude all test code from SpotBugs analysis.
+         Test code doesn't need the same level of scrutiny as production code.
+    -->
+    <Match>
+        <Class name="~.*Test$"/>
+    </Match>
+
     <!-- DTOs are Java records used for JSON serialization/deserialization.
          The EI_EXPOSE_REP warnings are false positives since:
          1. Records are immutable (final class, final fields)

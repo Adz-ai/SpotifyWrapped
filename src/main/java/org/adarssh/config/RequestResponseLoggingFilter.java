@@ -66,30 +66,30 @@ public class RequestResponseLoggingFilter implements Filter {
     }
 
     private void logRequest(ContentCachingRequestWrapper request) {
-        StringBuilder sb = new StringBuilder("\n========== HTTP REQUEST ==========\n");
-        sb.append(String.format("%s %s %s\n",
+        StringBuilder sb = new StringBuilder("%n========== HTTP REQUEST ===========%n");
+        sb.append(String.format("%s %s %s%n",
                 request.getMethod(),
                 request.getRequestURI(),
                 request.getProtocol()));
 
         // Log headers
-        sb.append("Headers:\n");
+        sb.append("Headers:%n");
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             // Don't log sensitive headers
             if (!headerName.equalsIgnoreCase("Authorization")
                 && !headerName.equalsIgnoreCase("Cookie")) {
-                sb.append(String.format("  %s: %s\n", headerName, request.getHeader(headerName)));
+                sb.append(String.format("  %s: %s%n", headerName, request.getHeader(headerName)));
             } else {
-                sb.append(String.format("  %s: [REDACTED]\n", headerName));
+                sb.append(String.format("  %s: [REDACTED]%n", headerName));
             }
         }
 
         // Log query parameters
         String queryString = request.getQueryString();
         if (queryString != null) {
-            sb.append(String.format("Query: %s\n", queryString));
+            sb.append(String.format("Query: %s%n", queryString));
         }
 
         // Log request body
@@ -99,7 +99,7 @@ public class RequestResponseLoggingFilter implements Filter {
             if (body.length() > MAX_PAYLOAD_LENGTH) {
                 body = body.substring(0, MAX_PAYLOAD_LENGTH) + "... [TRUNCATED]";
             }
-            sb.append(String.format("Body:\n%s\n", body));
+            sb.append(String.format("Body:%n%s%n", body));
         }
 
         sb.append("==================================");
@@ -107,14 +107,14 @@ public class RequestResponseLoggingFilter implements Filter {
     }
 
     private void logResponse(ContentCachingResponseWrapper response, long duration) {
-        StringBuilder sb = new StringBuilder("\n========== HTTP RESPONSE ==========\n");
-        sb.append(String.format("Status: %d\n", response.getStatus()));
-        sb.append(String.format("Duration: %d ms\n", duration));
+        StringBuilder sb = new StringBuilder("%n========== HTTP RESPONSE ==========%n");
+        sb.append(String.format("Status: %d%n", response.getStatus()));
+        sb.append(String.format("Duration: %d ms%n", duration));
 
         // Log response headers
-        sb.append("Headers:\n");
+        sb.append("Headers:%n");
         response.getHeaderNames().forEach(headerName ->
-                sb.append(String.format("  %s: %s\n", headerName, response.getHeader(headerName))));
+                sb.append(String.format("  %s: %s%n", headerName, response.getHeader(headerName))));
 
         // Log response body
         byte[] content = response.getContentAsByteArray();
@@ -123,7 +123,7 @@ public class RequestResponseLoggingFilter implements Filter {
             if (body.length() > MAX_PAYLOAD_LENGTH) {
                 body = body.substring(0, MAX_PAYLOAD_LENGTH) + "... [TRUNCATED]";
             }
-            sb.append(String.format("Body:\n%s\n", body));
+            sb.append(String.format("Body:%n%s%n", body));
         }
 
         sb.append("===================================");
