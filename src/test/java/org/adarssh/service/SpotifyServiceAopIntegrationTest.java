@@ -20,6 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -64,9 +65,11 @@ class SpotifyServiceAopIntegrationTest {
                 List.of(track1, track2, track3), 3, 5, 0, null, null);
 
         // Mock RestClient chain
-        RestClient.RequestHeadersUriSpec requestHeadersUriSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersUriSpec.class);
-        RestClient.RequestHeadersSpec requestHeadersSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersSpec.class);
-        RestClient.ResponseSpec responseSpec = org.mockito.Mockito.mock(RestClient.ResponseSpec.class);
+        RestClient.RequestHeadersUriSpec requestHeadersUriSpec =
+            mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec requestHeadersSpec =
+            mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -106,9 +109,11 @@ class SpotifyServiceAopIntegrationTest {
                 List.of(track1, track2), 2, 1, 0, null, null);
 
         // Mock RestClient chain
-        RestClient.RequestHeadersUriSpec requestHeadersUriSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersUriSpec.class);
-        RestClient.RequestHeadersSpec requestHeadersSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersSpec.class);
-        RestClient.ResponseSpec responseSpec = org.mockito.Mockito.mock(RestClient.ResponseSpec.class);
+        RestClient.RequestHeadersUriSpec requestHeadersUriSpec =
+            mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec requestHeadersSpec =
+            mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -140,9 +145,11 @@ class SpotifyServiceAopIntegrationTest {
                 List.of(artist1, artist2), 2, 5, 0, null, null);
 
         // Mock RestClient chain
-        RestClient.RequestHeadersUriSpec requestHeadersUriSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersUriSpec.class);
-        RestClient.RequestHeadersSpec requestHeadersSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersSpec.class);
-        RestClient.ResponseSpec responseSpec = org.mockito.Mockito.mock(RestClient.ResponseSpec.class);
+        RestClient.RequestHeadersUriSpec requestHeadersUriSpec =
+            mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec requestHeadersSpec =
+            mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -177,9 +184,11 @@ class SpotifyServiceAopIntegrationTest {
                 List.of(artist1, artist2), 2, 2, 0, null, null);
 
         // Mock RestClient chain
-        RestClient.RequestHeadersUriSpec requestHeadersUriSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersUriSpec.class);
-        RestClient.RequestHeadersSpec requestHeadersSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersSpec.class);
-        RestClient.ResponseSpec responseSpec = org.mockito.Mockito.mock(RestClient.ResponseSpec.class);
+        RestClient.RequestHeadersUriSpec requestHeadersUriSpec =
+            mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec requestHeadersSpec =
+            mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyRestClient.get()).thenReturn(requestHeadersUriSpec);
@@ -209,9 +218,11 @@ class SpotifyServiceAopIntegrationTest {
                 List.of(artist), 1, 10, 0, null, null);
 
         // Mock RestClient chain
-        RestClient.RequestHeadersUriSpec requestHeadersUriSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersUriSpec.class);
-        RestClient.RequestHeadersSpec requestHeadersSpec = org.mockito.Mockito.mock(RestClient.RequestHeadersSpec.class);
-        RestClient.ResponseSpec responseSpec = org.mockito.Mockito.mock(RestClient.ResponseSpec.class);
+        RestClient.RequestHeadersUriSpec requestHeadersUriSpec =
+            mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec requestHeadersSpec =
+            mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         when(oauth2TokenService.getUserAccessToken()).thenReturn(accessToken);
         when(spotifyProperties.defaultLimit()).thenReturn(defaultLimit);

@@ -41,8 +41,12 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+# Ignore hidden files except specific ones
 .*
 !/.gitignore
+!/frontend/.eslintrc.cjs
+!/frontend/.prettierrc.json
+!/frontend/.prettierignore
 /build/
 /out/
 /.gradle/

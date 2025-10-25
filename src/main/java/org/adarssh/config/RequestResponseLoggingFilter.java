@@ -78,8 +78,8 @@ public class RequestResponseLoggingFilter implements Filter {
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             // Don't log sensitive headers
-            if (!headerName.equalsIgnoreCase("Authorization") &&
-                !headerName.equalsIgnoreCase("Cookie")) {
+            if (!headerName.equalsIgnoreCase("Authorization")
+                && !headerName.equalsIgnoreCase("Cookie")) {
                 sb.append(String.format("  %s: %s\n", headerName, request.getHeader(headerName)));
             } else {
                 sb.append(String.format("  %s: [REDACTED]\n", headerName));

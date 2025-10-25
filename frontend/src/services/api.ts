@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosInstance, AxiosError } from 'axios';
+import type { AxiosInstance } from 'axios';
 import type {
   SpotifyWrappedResponse,
   UserTopItemsResponse,
@@ -28,10 +28,8 @@ class SpotifyApiClient {
    * Handle API errors and extract error message
    */
   private handleError(error: unknown): never {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      const message =
-        axiosError.response?.data?.message || axiosError.message || 'An unexpected error occurred';
+    if (axios.isAxiosError<ErrorResponse>(error)) {
+      const message = error.response?.data.message ?? error.message;
       throw new Error(message);
     }
     throw new Error('An unexpected error occurred');

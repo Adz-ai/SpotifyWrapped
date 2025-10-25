@@ -33,7 +33,7 @@ export const Login: FC<LoginProps> = ({ onLogin }) => {
             </button>
 
             <p className="mt-6 text-sm text-gray-500">
-              We'll need access to your top tracks and artists
+              We&apos;ll need access to your top tracks and artists
             </p>
           </div>
         </div>
