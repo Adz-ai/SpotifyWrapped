@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 
 // Determine backend URL based on environment
 // In Docker, use service name 'backend', otherwise use 127.0.0.1
-const backendUrl = process.env.VITE_API_URL || 'http://127.0.0.1:8080';
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+const backendUrl: string = (process.env.VITE_API_URL as string | undefined) ?? 'http://127.0.0.1:8080';
 
 // https://vitejs.dev/config/
 export default defineConfig({
