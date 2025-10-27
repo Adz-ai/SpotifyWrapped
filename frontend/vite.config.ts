@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// Determine backend URL based on environment
+// In Docker, use service name 'backend', otherwise use 127.0.0.1
+const backendUrl = process.env.VITE_API_URL || 'http://127.0.0.1:8080';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -9,19 +13,19 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        target: backendUrl,
         changeOrigin: true,
       },
       '/oauth2': {
-        target: 'http://127.0.0.1:8080',
+        target: backendUrl,
         changeOrigin: true,
       },
       '/login': {
-        target: 'http://127.0.0.1:8080',
+        target: backendUrl,
         changeOrigin: true,
       },
       '/logout': {
-        target: 'http://127.0.0.1:8080',
+        target: backendUrl,
         changeOrigin: true,
       },
     },
