@@ -21,6 +21,8 @@ class SpotifyApiClient {
         'Content-Type': 'application/json',
       },
       withCredentials: true, // Important for session cookies
+      xsrfCookieName: 'XSRF-TOKEN', // Name of the CSRF cookie from Spring Security
+      xsrfHeaderName: 'X-XSRF-TOKEN', // Name of the header to send CSRF token
     });
   }
 
