@@ -44,7 +44,7 @@ dependencies {
 
     // Caching
     implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
     // Resilience (Retry, Circuit Breaker)
     implementation("io.github.resilience4j:resilience4j-spring-boot3:2.2.0")
